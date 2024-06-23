@@ -113,4 +113,13 @@ public class SnakeControllerManager : MonoBehaviour
             contUp = 0;
         }
     }
+
+    public void TurnRight(bool shouldTurn)
+    {
+        turnRight = shouldTurn;
+    }
+    public void TurnLeft(bool shouldTurn)
+    {
+        turnLeft = shouldTurn;
+    }
 }

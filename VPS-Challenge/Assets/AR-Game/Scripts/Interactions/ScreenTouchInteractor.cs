@@ -3,25 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEngine.EventSystems;
+using System;
+using Niantic.Lightship.AR.Semantics;
 
-public class ScreenTouchInteractor : MonoBehaviour
+public class ScreenTouchSpawner : MonoBehaviour
 {
-    private bool hasToSpawnEgg = true;
-    private string[] allowTapOverCanvas = { "TapToPlaceCanvas", "PowerUpCanvas", };
+    [SerializeField] private string[] allowTapOverCanvas = { "TapToPlaceCanvas", "PowerUpCanvas", };
 
-    // Start is called before the first frame update
+    [SerializeField] private GameObject snakeEggPrefab;
+    [SerializeField] private ARSemanticSegmentationManager semanticManager;
+
+    private bool hasToSpawnEgg = true;
+    private bool ReadTouchs;
     void Start()
     {
-        
+        GameManager.Instance.OnMinimumMeshesFound += EnableTouchReader;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!ReadTouchs)
+        {
+            return;
+        }
         if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
         {
             Vector3 touch = Input.GetMouseButtonDown(0) ? Input.mousePosition : (Vector3)Input.GetTouch(0).position;
-
+  
             bool isTouchOverUI = IsTouchOverNotAllowUI(touch);
 
             if (!isTouchOverUI)
@@ -31,17 +40,12 @@ public class ScreenTouchInteractor : MonoBehaviour
                     Ray ray = Camera.main.ScreenPointToRay(touch);
                     RaycastHit hit;
 
-                    if (Physics.Raycast(ray, out hit))
+                    if (Physics.Raycast(ray, out hit) && IsTouchOverGround(touch))
                     {
-                        string objectName = hit.collider.gameObject.name;
-                        Debug.Log("Touched object: " + objectName);
                         hasToSpawnEgg = false;
                         GameManager.Instance.EggLaid();
-                        //TODO Implement egg
-                        GameManager.Instance.SnakeBorn();
-                        GameManager.Instance.SnakeManager.transform.position = hit.point;
-                        GameManager.Instance.SnakeManager.SetActive(true);
-
+                        GameObject egg = Instantiate(snakeEggPrefab, hit.point, Quaternion.identity);
+                        egg.GetComponent<EggController>().Snake = GameManager.Instance.SnakeManager;
                     }
                 }
       
@@ -71,5 +75,27 @@ public class ScreenTouchInteractor : MonoBehaviour
         }
 
         return result.Count > 0;
+    }
+
+    private void EnableTouchReader()
+    {
+        ReadTouchs = true;
+    }
+
+    private bool IsTouchOverGround(Vector2 touchPos)
+    {
+        var list = semanticManager.GetChannelNamesAt((int)touchPos.x, (int)touchPos.y);
+
+        if (list.Count > 0)
+        {
+            var channel = list[0];
+            if (channel.Equals("ground"))
+            {
+                Debug.Log(channel);
+                return true;
+            }
+
+        }
+        return false;
     }
 }
