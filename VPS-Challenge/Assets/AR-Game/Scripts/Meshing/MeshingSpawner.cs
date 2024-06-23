@@ -16,6 +16,9 @@ public class MeshingSpawner : MonoBehaviour
     [SerializeField] private GameObject meshRoot;
     [SerializeField] GameObject SnakeManagerGO;
 
+    [Header("Prefabs")]
+    [SerializeField] private GameObject apple;
+
     [Header("Mesh Scan Parameters")]
     [SerializeField] private int minimumMeshBlocks = 30;
     [SerializeField] private int miniumTimeMesh = 5000;
@@ -40,15 +43,18 @@ public class MeshingSpawner : MonoBehaviour
     private List<GameObject> meshBloks = new List<GameObject>();
     private Dictionary<GameObject, Vector3> BlockCenterDic = new Dictionary<GameObject, Vector3>();
     private List<float> meshCenters;
-
+    
     // Start is called before the first frame update
     void Start()
     {
         meshManager.meshesChanged += MeshesChanged;
         meshRoot = origin.TrackablesParent.gameObject;
-
+        GameManager.Instance.OnSnakePlaced += SpawnFirstApple;
         GameManager.Instance.OnSnakePlaced += FindFloor;
+        
     }
+
+
 
     private void MeshesChanged(ARMeshesChangedEventArgs obj)
     {
@@ -143,6 +149,42 @@ public class MeshingSpawner : MonoBehaviour
                     FloorMeshes.Remove(key);
                 }
             }
+        }
+    }
+
+    private void SpawnFirstApple()
+    {
+        FirstApple(SnakeManager.Instance.CurrentMesh);
+    }
+
+    public void FirstApple(Mesh mesh)
+    {
+        int vertex = Random.Range(0, mesh.vertexCount);
+
+        Vector3 normal = mesh.normals[vertex];
+        bool floorPart = Mathf.Abs(normal.y) >= 1.0f - groundTolerance;
+        if (floorPart)
+        {
+            Vector3 position = mesh.vertices[vertex];
+
+            Debug.Log(position);
+
+            Vector3 globalPos = transform.TransformPoint(position);
+            position = globalPos + Vector3.up * origin.CameraYOffset;
+
+            Debug.Log(position);
+
+            position = new Vector3(position.x, position.y + appleOffset + apple.transform.localScale.y / 2, position.z);
+            var newApple = Instantiate(apple, position, Quaternion.identity);
+
+            //RadarManager.instance.GenerateHelper(newApple);
+            //GamePlayManager.instance.ActiveApples.Add(newApple);
+            Debug.Log("New apple");
+        }
+        else
+        {
+            FirstApple(mesh);
+            Debug.Log("No Valit Vertex, Recalculating...");
         }
     }
 }

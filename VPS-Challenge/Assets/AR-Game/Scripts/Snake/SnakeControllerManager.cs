@@ -92,6 +92,7 @@ public class SnakeControllerManager : MonoBehaviour
             GameObject snakeHead = Instantiate(bodyPartPrefabs[0],
             transform.position + Vector3.up * 0.1f, Quaternion.Euler(0, 180, 0), transform);
             snakeBody.Add(snakeHead.GetComponent<SnakeBodyPartManager>());
+            GameManager.Instance.SnakeSpawen();
         }
 
         SnakeBodyPartManager bodySnake = snakeBody[snakeBody.Count - 1];

@@ -8,7 +8,7 @@ public class SnakeManager : MonoBehaviour
     public static SnakeManager Instance;
 
 
-    public Mesh currentMesh;
+    public Mesh CurrentMesh;
     public GameObject currenMeshContainer;
     public bool justSpawned = true;
 
@@ -41,7 +41,7 @@ public class SnakeManager : MonoBehaviour
 
         if (meshFilter)
         {
-            currentMesh = meshFilter.sharedMesh;
+            CurrentMesh = meshFilter.sharedMesh;
             currenMeshContainer = collision.gameObject;
             if (justSpawned)
             {
