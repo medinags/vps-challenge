@@ -90,8 +90,9 @@ public class SnakeControllerManager : MonoBehaviour
         if (snakeBody.Count == 0)
         {
             GameObject snakeHead = Instantiate(bodyPartPrefabs[0],
-            transform.position + Vector3.up * 0.1f, Quaternion.Euler(0, 180, 0), transform);
-            snakeBody.Add(snakeHead.GetComponent<SnakeBodyPartManager>());
+            transform.position + Vector3.up * 0.045f, Quaternion.Euler(0, 180, 0), transform);
+            SnakeBodyPartManager Controller = snakeHead.AddComponent<SnakeBodyPartManager>();
+            snakeBody.Add(Controller);
             GameManager.Instance.SnakeSpawen();
         }
 
@@ -109,7 +110,19 @@ public class SnakeControllerManager : MonoBehaviour
             int parts = snakeBody.Count;
             GameObject part = (parts % 2 == 0) ? bodyPartPrefabs[1] : bodyPartPrefabs[2];
             GameObject newPart = Instantiate(part, transform.position, transform.rotation, transform);
+
+            newPart.AddComponent<SnakeBodyPartManager>();
+            newPart.AddComponent<Rigidbody>();
+
             snakeBody.Add(newPart.GetComponent<SnakeBodyPartManager>());
+
+
+            if (snakeBody.Count > SnakeManager.Instance.visibleBody)
+            {
+                newPart.transform.GetChild(0).gameObject.SetActive(false);
+                newPart.GetComponent<Rigidbody>().isKinematic = true;
+            }
+
             newPart.GetComponent<SnakeBodyPartManager>().ClearSnake();
             contUp = 0;
         }

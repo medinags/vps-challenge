@@ -10,6 +10,8 @@ using System;
 
 public class MeshingSpawner : MonoBehaviour
 {
+    public static MeshingSpawner Instance;
+
     [Header("AR References")]
     [SerializeField] private XROrigin origin;
     [SerializeField] private ARMeshManager meshManager;
@@ -18,7 +20,7 @@ public class MeshingSpawner : MonoBehaviour
 
     [Header("Prefabs")]
     [SerializeField] private GameObject apple;
-
+    public List<GameObject> Containers = new List<GameObject>();
     [Header("Mesh Scan Parameters")]
     [SerializeField] private int minimumMeshBlocks = 30;
     [SerializeField] private int miniumTimeMesh = 5000;
@@ -43,7 +45,21 @@ public class MeshingSpawner : MonoBehaviour
     private List<GameObject> meshBloks = new List<GameObject>();
     private Dictionary<GameObject, Vector3> BlockCenterDic = new Dictionary<GameObject, Vector3>();
     private List<float> meshCenters;
-    
+    [HideInInspector]
+    public List<GameObject> currentEnemies = new List<GameObject>();
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,10 +67,57 @@ public class MeshingSpawner : MonoBehaviour
         meshRoot = origin.TrackablesParent.gameObject;
         GameManager.Instance.OnSnakePlaced += SpawnFirstApple;
         GameManager.Instance.OnSnakePlaced += FindFloor;
+        GameManager.Instance.OnappleEaten += AppleEaten;
         
     }
 
+    private void AppleEaten()
+    {
+        FindFloor();
+        GrowApples();
+    }
 
+
+    public void GrowApples()
+    {
+        if (!GamePlayManager.Instance.ShouldSpawnApples)
+            return;
+
+        float offset = appleOffset + apple.transform.localScale.y / 2;
+        var newApple = GenerateItem(offset, apple);
+
+        if (newApple != null)
+        {
+
+            if (currentEnemies.Count == 0)
+            {
+                GamePlayManager.Instance.ActiveApples.Add(newApple);
+                //RadarManager.instance.GenerateHelper(newApple);
+
+            }
+            else
+            {
+                foreach (var enemie in currentEnemies)
+                {
+                    var dis = Vector3.Distance(enemie.transform.position, newApple.transform.position);
+                    if (dis < minDisEnemies)
+                    {
+                        var pos = enemie.transform.position;
+                        apple.transform.position = new Vector3(pos.x * Random.Range(0.3f, 1), pos.y, pos.z * Random.Range(0.3f, 1));
+                    }
+                }
+
+                GamePlayManager.Instance.ActiveApples.Add(newApple);
+                //RadarManager.instance.GenerateHelper(newApple);
+            }
+
+            Debug.Log("New Apple");
+        }
+        else
+        {
+            Invoke(nameof(GrowApples), 1.0f);
+        }
+    }
 
     private void MeshesChanged(ARMeshesChangedEventArgs obj)
     {
@@ -176,15 +239,56 @@ public class MeshingSpawner : MonoBehaviour
 
             position = new Vector3(position.x, position.y + appleOffset + apple.transform.localScale.y / 2, position.z);
             var newApple = Instantiate(apple, position, Quaternion.identity);
-
+            newApple.name = "1";
             //RadarManager.instance.GenerateHelper(newApple);
-            //GamePlayManager.instance.ActiveApples.Add(newApple);
+            GamePlayManager.Instance.ActiveApples.Add(newApple);
             Debug.Log("New apple");
         }
         else
         {
             FirstApple(mesh);
             Debug.Log("No Valit Vertex, Recalculating...");
+        }
+    }
+
+    private GameObject GenerateItem(float offsetFloor, GameObject spawnObject)
+    {
+        var randomPosition = Random.Range(0, FloorMeshes.Count);
+        GameObject floorBlock = FloorMeshes[randomPosition];
+
+        if (floorBlock != null)
+        {
+            var mesh = floorBlock.GetComponent<MeshFilter>().sharedMesh;
+            int vertex = Random.Range(0, mesh.vertexCount);
+
+            Vector3 normal = mesh.normals[vertex];
+            bool floorPart = Mathf.Abs(normal.y) >= 1.0f - groundTolerance;
+
+
+            if (floorPart)
+            {
+                Vector3 position = mesh.vertices[vertex];
+
+                Vector3 globalPos = transform.TransformPoint(position);
+                position = globalPos + Vector3.up * origin.CameraYOffset;
+
+                //bool isSnakeLevel = SnakeManagerGO.transform.position.y;
+
+                position = new Vector3(position.x, position.y + offsetFloor, position.z);
+                var newApple = Instantiate(spawnObject, position, Quaternion.identity);
+
+                return newApple;
+            }
+            else
+            {
+                Debug.Log("No Valit Vertex, Recalculating...");
+                return null;
+
+            }
+        }
+        else
+        {
+            return null;
         }
     }
 }
