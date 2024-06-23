@@ -21,6 +21,7 @@ public class MeshingSpawner : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private GameObject apple;
     public List<GameObject> Containers = new List<GameObject>();
+    [SerializeField] private List<GameObject> powersUp = new List<GameObject>();
     [Header("Mesh Scan Parameters")]
     [SerializeField] private int minimumMeshBlocks = 30;
     [SerializeField] private int miniumTimeMesh = 5000;
@@ -140,11 +141,45 @@ public class MeshingSpawner : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SpawnPowerUp()
     {
-        
+        Debug.Log("Power up: " + powersUp.Count);
+        GameObject powerUpPrefab = powersUp[Random.Range(0, powersUp.Count)];
+        GameObject powerUpGO = GenerateItem(0, powerUpPrefab);
+
+        Debug.Log(powerUpPrefab.name);
+
+        if (powerUpGO != null)
+        {
+            powerUpGO.name = powerUpPrefab.name;
+
+            if (currentEnemies.Count == 0)
+            {
+                //RadarManager.instance.GenerateHelper(powerUpGO);
+            }
+            else
+            {
+                foreach (var enemie in currentEnemies)
+                {
+                    var dis = Vector3.Distance(enemie.transform.position, powerUpGO.transform.position);
+                    if (dis < minDisEnemies)
+                    {
+                        var pos = enemie.transform.position;
+                        apple.transform.position = new Vector3(pos.x * Random.Range(0.3f, 1), pos.y, pos.z * Random.Range(0.3f, 1));
+                    }
+                }
+
+                Debug.Log("New Power Up");
+                //RadarManager.instance.GenerateHelper(powerUpGO);
+            }
+        }
+        else
+        {
+            Debug.Log("Try again Power Up");
+            Invoke(nameof(SpawnPowerUp), 0.5f);
+        }
     }
+
 
     private void SaveBlocks(GameObject child)
     {

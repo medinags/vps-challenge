@@ -19,6 +19,9 @@ public class SnakeManager : MonoBehaviour
     private const string powerUpDestroy = "GemPUDestroy";
     private const string powerUpGrass = "GemPUGrass";
 
+    private bool hasImmudity;
+
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -44,10 +47,14 @@ public class SnakeManager : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         string tag = other.tag;
+
         switch (tag)
         {
             case appleTag:
                 CollisionWithApple(other.gameObject);
+                break;
+            case powerUpTag:
+                CollisionWithPowerUp(other.gameObject);
                 break;
             default:
                 break;
@@ -60,10 +67,10 @@ public class SnakeManager : MonoBehaviour
     {
         if (visibleBody < SnakeControllerManager.Instance.snakeBody.Count)
         {
-            GamePlayManager.Instance.AppleCount++;
+            GamePlayManager.Instance.ApplesCount++;
             GamePlayManager.Instance.PointCounts();
 
-            if (GamePlayManager.Instance.AppleCount % LifeInApple == 0)
+            if (GamePlayManager.Instance.ApplesCount % LifeInApple == 0)
             {
                 GamePlayManager.Instance.LifeCount++;
             }
@@ -115,11 +122,11 @@ public class SnakeManager : MonoBehaviour
             foreach (var item in GamePlayManager.Instance.PowerUpIn)
             {
 
-                if (GamePlayManager.Instance.AppleCount == item)
+                if (GamePlayManager.Instance.ApplesCount == item)
                 {
-                    Debug.Log("Spanw Power Up");
+                    Debug.Log("Spawn Power Up");
 
-                    //ObjectProviderManager.Instance.SpawnPowerUp();
+                    MeshingSpawner.Instance.SpawnPowerUp();
                 }
             }
 
@@ -128,6 +135,25 @@ public class SnakeManager : MonoBehaviour
 
         }
     }
+
+
+
+    private void CollisionWithPowerUp(GameObject powerUp)
+    {
+        Debug.Log("Go Power Up: " + powerUp.name);
+        //RadarManager.instance.needDetroyHelper = true;
+        //RadarManager.instance.DeleteHelper(other.gameObject);
+
+        //Destroy(other.gameObject);
+
+        //RADAR DESTROY EVERYTHING
+
+
+        PowerUpType powerUpType = powerUp.GetComponent<PowerUpHelper>().PowerUpType;
+        hasImmudity = powerUpType == PowerUpType.Immudity;
+        GamePlayManager.Instance.NewPowerUp(powerUpType);
+    }
+
     private void OnCollisionStay(Collision collision)
     {
         var meshFilter = collision.gameObject.GetComponent<MeshFilter>();
@@ -149,4 +175,11 @@ public class SnakeManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         Destroy(Explosion);
     }
+}
+
+public enum PowerUpType
+{
+    Apples,
+    Immudity,
+    Grass,
 }

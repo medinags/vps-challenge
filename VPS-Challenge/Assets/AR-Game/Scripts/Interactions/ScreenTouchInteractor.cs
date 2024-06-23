@@ -5,19 +5,30 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
 using Niantic.Lightship.AR.Semantics;
+using Random = UnityEngine.Random;
 
 public class ScreenTouchSpawner : MonoBehaviour
 {
     [SerializeField] private string[] allowTapOverCanvas = { "TapToPlaceCanvas", "PowerUpCanvas", };
 
     [SerializeField] private GameObject snakeEggPrefab;
+    [SerializeField] private GameObject applePrefab;
+
     [SerializeField] private ARSemanticSegmentationManager semanticManager;
 
     private bool hasToSpawnEgg = true;
-    private bool ReadTouchs;
+    public bool ReadTouchs;
+    public float launchForce = 200;
     void Start()
     {
         GameManager.Instance.OnMinimumMeshesFound += EnableTouchReader;
+        GameManager.Instance.OnEggLaid += DisableToucReader;
+        GamePlayManager.Instance.OnNewPowerUp += NewPowerUp;
+    }
+
+    private void NewPowerUp(PowerUpType obj)
+    {
+        ReadTouchs = obj.Equals(PowerUpType.Apples);
     }
 
     // Update is called once per frame
@@ -30,28 +41,72 @@ public class ScreenTouchSpawner : MonoBehaviour
         if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
         {
             Vector3 touch = Input.GetMouseButtonDown(0) ? Input.mousePosition : (Vector3)Input.GetTouch(0).position;
-  
+
             bool isTouchOverUI = IsTouchOverNotAllowUI(touch);
 
             if (!isTouchOverUI)
             {
-                if (hasToSpawnEgg)
-                {
-                    Ray ray = Camera.main.ScreenPointToRay(touch);
-                    RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(touch);
+                RaycastHit hit;
 
-                    if (Physics.Raycast(ray, out hit) && IsTouchOverGround(touch))
+                if (Physics.Raycast(ray, out hit))
+                {
+                    bool isTouchOverGround = IsTouchOverGround(touch);
+
+                    if (hasToSpawnEgg && isTouchOverGround)
                     {
                         hasToSpawnEgg = false;
                         GameManager.Instance.EggLaid();
                         GameObject egg = Instantiate(snakeEggPrefab, hit.point, Quaternion.identity);
                         egg.GetComponent<EggController>().Snake = GameManager.Instance.SnakeManager;
+
                     }
+                    else if (GamePlayManager.Instance.IsPowerUpAppleActivated)
+                    {
+                        ReadTouchs = false;
+                        GameObject container = SpawnPowerUpApples();
+
+                        Vector3 entrancePoint = Camera.main.ScreenToWorldPoint(new Vector3(touch.x, touch.y, Camera.main.nearClipPlane));
+                        Rigidbody rb = container.GetComponent<Rigidbody>();
+                        rb.velocity = new Vector3(0f, 0f, 0f);
+                        rb.angularVelocity = new Vector3(0f, 0f, 0f);
+
+                        container.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f));
+                        container.transform.position = entrancePoint;
+
+                        float force = 200.0f;
+                        rb.AddForce(Camera.main.transform.forward * force);
+                        GamePlayManager.Instance.IsPowerUpAppleActivated = false;
+                        UIManager.Instance.HidePowerUpApple();
+
+                    }
+
                 }
-      
+
             }
 
-         }
+        }
+    }
+
+    private GameObject SpawnPowerUpApples()
+    {
+        int quantity = Random.Range(2, 5);
+        GameObject appleContainer = new GameObject();
+        appleContainer.transform.position = Camera.main.transform.position;
+        
+        appleContainer.AddComponent<Rigidbody>();
+        for (int i = 0; i < quantity; i++)
+        {
+            GameObject apple = Instantiate(applePrefab, appleContainer.transform);
+            float randomValueX = Random.Range(0.1f, 0.5f);
+            float randomValueZ = Random.Range(0.1f, 0.5f);
+            apple.transform.localPosition = new Vector3(randomValueX,0,randomValueZ);
+            apple.GetComponent<MeshCollider>().enabled = true;
+            apple.AddComponent<AppleFromPowerUp>();
+        }
+
+        return appleContainer;
+
     }
 
     private bool IsTouchOverNotAllowUI(Vector2 touchPosition)
@@ -80,6 +135,11 @@ public class ScreenTouchSpawner : MonoBehaviour
     private void EnableTouchReader()
     {
         ReadTouchs = true;
+    }
+
+    private void DisableToucReader()
+    {
+        ReadTouchs = false;
     }
 
     private bool IsTouchOverGround(Vector2 touchPos)
