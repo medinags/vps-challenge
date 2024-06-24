@@ -165,12 +165,17 @@ public class SnakeManager : MonoBehaviour
 
         PowerUpType powerUpType = powerUp.GetComponent<PowerUpHelper>().PowerUpType;
         GamePlayManager.Instance.NewPowerUp(powerUpType);
+        if (powerUpType == PowerUpType.Immudity)
+        {
+            hasImmudity = true;
+            Helmet.SetActive(hasImmudity);
+        }
     }
 
     private void NewPowerUp(PowerUpType obj)
     {
-        hasImmudity = obj == PowerUpType.Immudity;
-        Helmet.SetActive(hasImmudity);
+        //hasImmudity = obj == PowerUpType.Immudity;
+        //Helmet.SetActive(hasImmudity);
     }
     private void CollisionWithEnemy(GameObject enemy)
     {

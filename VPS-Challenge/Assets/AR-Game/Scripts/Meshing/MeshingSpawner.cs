@@ -282,12 +282,8 @@ public class MeshingSpawner : MonoBehaviour
         {
             Vector3 position = mesh.vertices[vertex];
 
-            Debug.Log(position);
-
             Vector3 globalPos = transform.TransformPoint(position);
             position = globalPos + Vector3.up * origin.CameraYOffset;
-
-            Debug.Log(position);
 
             position = new Vector3(position.x, position.y + appleOffset + apple.transform.localScale.y / 2, position.z);
             var newApple = Instantiate(apple, position, Quaternion.identity);

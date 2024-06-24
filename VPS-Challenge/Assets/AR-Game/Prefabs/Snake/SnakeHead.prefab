@@ -491,7 +491,7 @@ MonoBehaviour:
   CurrentMesh: {fileID: 0}
   currenMeshContainer: {fileID: 0}
   justSpawned: 1
-  visibleBody: 1
+  visibleBody: 2
   Helmet: {fileID: 7538176440173126543}
   hasImmudity: 0
 --- !u!1 &4858525293612881510
