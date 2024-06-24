@@ -54,7 +54,7 @@ public class GamePlayManager : MonoBehaviour
     public void NewPowerUp(PowerUpType powerUpType)
     {
         PowerUpsCount++;
-        Instance.PointCounts();
+
 
         switch (powerUpType)
         {
@@ -65,13 +65,14 @@ public class GamePlayManager : MonoBehaviour
 
                 break;
             case PowerUpType.Grass:
-
+                PowerUpGrassCount++;
+                IsPowerUpGrassActivated = true;
                 break;
             default:
                 break;
         }
 
-   
+        Instance.PointCounts();
         OnNewPowerUp?.Invoke(powerUpType);
     }
 
@@ -79,8 +80,10 @@ public class GamePlayManager : MonoBehaviour
     {
         Points = ApplesCount * APPLE_VALUE +
             PowerUpsCount*POWER_UP +
+
             PowerUpDestroyCount*POWER_UP_DESTROY +
             PowerUpGrassCount*POWER_UP_GRASS;
+        UIManager.Instance.UpdatePoints(Points.ToString(), LifeCount.ToString());
     }
 
 }

@@ -20,6 +20,7 @@ public class MeshingSpawner : MonoBehaviour
 
     [Header("Prefabs")]
     [SerializeField] private GameObject apple;
+    [SerializeField] private GameObject grass;
     public List<GameObject> Containers = new List<GameObject>();
     [SerializeField] private List<GameObject> enemyBlocks = new List<GameObject>();
     [SerializeField] private List<GameObject> powersUp = new List<GameObject>();
@@ -50,7 +51,8 @@ public class MeshingSpawner : MonoBehaviour
     private List<float> meshCenters;
     [HideInInspector]
     public List<GameObject> currentEnemies = new List<GameObject>();
-
+    private int grassQuantity = 0;
+    private int grassPowerCount = 0;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -71,7 +73,19 @@ public class MeshingSpawner : MonoBehaviour
         GameManager.Instance.OnSnakePlaced += SpawnFirstApple;
         GameManager.Instance.OnSnakePlaced += FindFloor;
         GameManager.Instance.OnappleEaten += AppleEaten;
+        GamePlayManager.Instance.OnNewPowerUp += NewPowerUp;
         
+    }
+
+    private void NewPowerUp(PowerUpType obj)
+    {
+        if (obj.Equals(PowerUpType.Grass))
+        {
+            grassQuantity = Random.Range(4, 10);
+            grassPowerCount = 0;
+            GrowGrass();
+            UIManager.Instance.ShowPowerUpGrass(grassQuantity);
+        }
     }
 
     private void AppleEaten()
@@ -366,6 +380,41 @@ public class MeshingSpawner : MonoBehaviour
         else
         {
             Invoke(nameof(SpawnEnemy), 1.0f);
+        }
+    }
+
+    public void GrowGrass()
+    {
+        GameObject powerUpGrass = GenerateItem(0, grass);
+
+        if (powerUpGrass != null)
+        {
+            powerUpGrass.name = grass.name;
+            GrassController startGrass = powerUpGrass.transform.GetChild(0).GetComponent<GrassController>();
+            startGrass.GrowGrass();
+            GameObject explosion = powerUpGrass.transform.GetChild(1).gameObject;
+            powerUpGrass.transform.parent = null;
+            explosion.transform.localScale = Vector3.one;
+            explosion.SetActive(true);
+            powerUpGrass.transform.rotation = Quaternion.Euler(grass.transform.rotation.x, Random.Range(0, 360), grass.transform.rotation.z);
+            powerUpGrass.transform.parent = Containers[1].transform;
+            StartCoroutine(SnakeManager.Instance.DestroyExplosion(explosion));
+
+            if (grassPowerCount < grassQuantity)
+            {
+                Invoke(nameof(GrowGrass), 0.5f);
+                grassPowerCount++;
+            }
+            else
+            {
+                GamePlayManager.Instance.IsPowerUpGrassActivated = false;
+            }
+
+
+        }
+        else
+        {
+            Invoke(nameof(GrowGrass), 1);
         }
     }
 }

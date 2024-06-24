@@ -11,6 +11,7 @@ public class SnakeManager : MonoBehaviour
     public GameObject currenMeshContainer;
     public bool justSpawned = true;
     public int visibleBody = 1;
+    [SerializeField] private GameObject Helmet;
 
     private const string appleTag = "Apple";
     private const string powerUpTag = "PowerUp";
@@ -38,8 +39,10 @@ public class SnakeManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        GamePlayManager.Instance.OnNewPowerUp += NewPowerUp;
     }
+
+
 
     // Update is called once per frame
     void Update()
@@ -164,10 +167,14 @@ public class SnakeManager : MonoBehaviour
 
 
         PowerUpType powerUpType = powerUp.GetComponent<PowerUpHelper>().PowerUpType;
-        hasImmudity = powerUpType == PowerUpType.Immudity;
         GamePlayManager.Instance.NewPowerUp(powerUpType);
     }
 
+    private void NewPowerUp(PowerUpType obj)
+    {
+        hasImmudity = obj == PowerUpType.Immudity;
+        Helmet.SetActive(hasImmudity);
+    }
     private void CollisionWithEnemy(GameObject enemy)
     {
         GameObject rootEnemy = enemy.transform.parent.gameObject;
@@ -176,16 +183,20 @@ public class SnakeManager : MonoBehaviour
        
             int indexEnemy = MeshingSpawner.Instance.currentEnemies.IndexOf(rootEnemy);
             MeshingSpawner.Instance.currentEnemies.RemoveAt(indexEnemy);
+            Destroy(rootEnemy);
             GamePlayManager.Instance.PowerUpDestroyCount++;
             GamePlayManager.Instance.PointCounts();
 
             hasImmudity = false;
+            Helmet.SetActive(false);
         }
         else
         {
             var dead = rootEnemy.GetComponent<DeathHandling>();
             dead.StartDeadTimer();
         }
+
+        GamePlayManager.Instance.PointCounts();
     }
 
     private void OnCollisionStay(Collision collision)
