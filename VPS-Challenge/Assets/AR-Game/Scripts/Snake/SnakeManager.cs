@@ -60,6 +60,7 @@ public class SnakeManager : MonoBehaviour
                 break;
             case powerUpTag:
                 CollisionWithPowerUp(other.gameObject);
+                ARText.Instance.ShowSentence(true);
                 break;
             default:
                 break;
@@ -189,11 +190,13 @@ public class SnakeManager : MonoBehaviour
 
             hasImmudity = false;
             Helmet.SetActive(false);
+            ARText.Instance.ShowSentence(true);
         }
         else
         {
             var dead = rootEnemy.GetComponent<DeathHandling>();
             dead.StartDeadTimer();
+            ARText.Instance.ShowSentence(false);
         }
 
         GamePlayManager.Instance.PointCounts();
