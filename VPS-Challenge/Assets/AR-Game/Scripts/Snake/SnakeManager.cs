@@ -19,7 +19,9 @@ public class SnakeManager : MonoBehaviour
     private const string powerUpDestroy = "GemPUDestroy";
     private const string powerUpGrass = "GemPUGrass";
 
-    private bool hasImmudity;
+    public bool hasImmudity;
+
+    private const int LifeInApple = 3;
 
 
     private void Awake()
@@ -61,7 +63,19 @@ public class SnakeManager : MonoBehaviour
         }
     }
 
-    private const int LifeInApple = 3;
+    private void OnCollisionEnter(Collision collision)
+    {
+        string tag = collision.gameObject.tag;
+        switch (tag)
+        {
+            case enemyTag:
+                CollisionWithEnemy(collision.gameObject);
+                break;
+            default:
+                break;
+        }
+    }
+
 
     private void CollisionWithApple(GameObject apple)
     {
@@ -152,6 +166,26 @@ public class SnakeManager : MonoBehaviour
         PowerUpType powerUpType = powerUp.GetComponent<PowerUpHelper>().PowerUpType;
         hasImmudity = powerUpType == PowerUpType.Immudity;
         GamePlayManager.Instance.NewPowerUp(powerUpType);
+    }
+
+    private void CollisionWithEnemy(GameObject enemy)
+    {
+        GameObject rootEnemy = enemy.transform.parent.gameObject;
+        if (hasImmudity)
+        {
+       
+            int indexEnemy = MeshingSpawner.Instance.currentEnemies.IndexOf(rootEnemy);
+            MeshingSpawner.Instance.currentEnemies.RemoveAt(indexEnemy);
+            GamePlayManager.Instance.PowerUpDestroyCount++;
+            GamePlayManager.Instance.PointCounts();
+
+            hasImmudity = false;
+        }
+        else
+        {
+            var dead = rootEnemy.GetComponent<DeathHandling>();
+            dead.StartDeadTimer();
+        }
     }
 
     private void OnCollisionStay(Collision collision)

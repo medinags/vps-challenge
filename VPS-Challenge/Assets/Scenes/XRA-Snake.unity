@@ -837,6 +837,11 @@ MonoBehaviour:
   Containers:
   - {fileID: 662619855}
   - {fileID: 1561338354}
+  enemyBlocks:
+  - {fileID: 8280831179132276224, guid: 2842b8d901eaf8348a4d56c97515e8a5, type: 3}
+  - {fileID: 2405824977330990661, guid: 20ddca83a80bd404d95b0c6268a83142, type: 3}
+  - {fileID: 6128467278411194192, guid: f97c4abe606cec349a3af41b6bc65565, type: 3}
+  - {fileID: 2398717094945021408, guid: cdea4122e0e841244a6697290c203646, type: 3}
   powersUp:
   - {fileID: 6409658023324664887, guid: 9703bebf255953a409612a22b2d39298, type: 3}
   minimumMeshBlocks: 10

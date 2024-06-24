@@ -21,7 +21,9 @@ public class MeshingSpawner : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private GameObject apple;
     public List<GameObject> Containers = new List<GameObject>();
+    [SerializeField] private List<GameObject> enemyBlocks = new List<GameObject>();
     [SerializeField] private List<GameObject> powersUp = new List<GameObject>();
+
     [Header("Mesh Scan Parameters")]
     [SerializeField] private int minimumMeshBlocks = 30;
     [SerializeField] private int miniumTimeMesh = 5000;
@@ -76,6 +78,7 @@ public class MeshingSpawner : MonoBehaviour
     {
         FindFloor();
         GrowApples();
+        SpawnEnemy();
     }
 
 
@@ -324,6 +327,45 @@ public class MeshingSpawner : MonoBehaviour
         else
         {
             return null;
+        }
+    }
+
+    public void SpawnEnemy()
+    {
+        GameObject enemyPrefab = enemyBlocks[Random.Range(0, enemyBlocks.Count)];
+        GameObject enemyBlock = GenerateItem(0, enemyPrefab);
+
+        if (enemyBlock != null)
+        {
+
+            if (currentEnemies.Count == 0)
+            {
+                enemyBlock.name = enemyPrefab.name + currentEnemies.Count;
+                currentEnemies.Add(enemyBlock);
+                enemyBlock.transform.parent = Containers[0].gameObject.transform;
+            }
+            else
+            {
+                foreach (var enemie in currentEnemies)
+                {
+                    var dis = Vector3.Distance(enemie.transform.position, enemyBlock.transform.position);
+                    if (dis < minDisEnemies)
+                    {
+                        var pos = enemie.transform.position;
+                        enemyBlock.transform.position = new Vector3(pos.x * Random.Range(0.3f, 1), pos.y, pos.z * Random.Range(0.3f, 1));
+                    }
+                }
+
+                enemyBlock.transform.parent = Containers[0].gameObject.transform;
+                enemyBlock.name = enemyPrefab.name + currentEnemies.Count;
+                currentEnemies.Add(enemyBlock);
+                Debug.Log("New Block Enemy");
+            }
+
+        }
+        else
+        {
+            Invoke(nameof(SpawnEnemy), 1.0f);
         }
     }
 }
