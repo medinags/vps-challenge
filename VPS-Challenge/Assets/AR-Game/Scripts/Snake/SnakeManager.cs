@@ -93,8 +93,8 @@ public class SnakeManager : MonoBehaviour
                 GamePlayManager.Instance.LifeCount++;
             }
 
-            //RadarManager.instance.needDetroyHelper = true;
-            //RadarManager.instance.DeleteHelper(other.gameObject);
+            RadarManager.Instance.needDetroyHelper = true;
+            RadarManager.Instance.DeleteHelper(apple);
 
             visibleBody++;
 
@@ -148,7 +148,7 @@ public class SnakeManager : MonoBehaviour
                 }
             }
 
-            Destroy(apple);
+            //Destroy(apple);
             GameManager.Instance.AppleEaten();
 
         }
@@ -159,12 +159,8 @@ public class SnakeManager : MonoBehaviour
     private void CollisionWithPowerUp(GameObject powerUp)
     {
         Debug.Log("Go Power Up: " + powerUp.name);
-        //RadarManager.instance.needDetroyHelper = true;
-        //RadarManager.instance.DeleteHelper(other.gameObject);
-
-        //Destroy(other.gameObject);
-
-        //RADAR DESTROY EVERYTHING
+        RadarManager.Instance.needDetroyHelper = true;
+        RadarManager.Instance.DeleteHelper(powerUp);
 
 
         PowerUpType powerUpType = powerUp.GetComponent<PowerUpHelper>().PowerUpType;

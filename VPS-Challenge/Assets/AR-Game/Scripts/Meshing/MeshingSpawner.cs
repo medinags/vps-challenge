@@ -110,7 +110,7 @@ public class MeshingSpawner : MonoBehaviour
             if (currentEnemies.Count == 0)
             {
                 GamePlayManager.Instance.ActiveApples.Add(newApple);
-                //RadarManager.instance.GenerateHelper(newApple);
+                RadarManager.Instance.GenerateHelper(newApple);
 
             }
             else
@@ -126,7 +126,7 @@ public class MeshingSpawner : MonoBehaviour
                 }
 
                 GamePlayManager.Instance.ActiveApples.Add(newApple);
-                //RadarManager.instance.GenerateHelper(newApple);
+                RadarManager.Instance.GenerateHelper(newApple);
             }
 
             Debug.Log("New Apple");
@@ -172,7 +172,7 @@ public class MeshingSpawner : MonoBehaviour
 
             if (currentEnemies.Count == 0)
             {
-                //RadarManager.instance.GenerateHelper(powerUpGO);
+                RadarManager.Instance.GenerateHelper(powerUpGO);
             }
             else
             {
@@ -187,7 +187,7 @@ public class MeshingSpawner : MonoBehaviour
                 }
 
                 Debug.Log("New Power Up");
-                //RadarManager.instance.GenerateHelper(powerUpGO);
+                RadarManager.Instance.GenerateHelper(powerUpGO);
             }
         }
         else
@@ -292,7 +292,7 @@ public class MeshingSpawner : MonoBehaviour
             position = new Vector3(position.x, position.y + appleOffset + apple.transform.localScale.y / 2, position.z);
             var newApple = Instantiate(apple, position, Quaternion.identity);
             newApple.name = "1";
-            //RadarManager.instance.GenerateHelper(newApple);
+            RadarManager.Instance.GenerateHelper(newApple);
             GamePlayManager.Instance.ActiveApples.Add(newApple);
             Debug.Log("New apple");
         }
