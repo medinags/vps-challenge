@@ -110,7 +110,7 @@ public class MeshingSpawner : MonoBehaviour
             if (currentEnemies.Count == 0)
             {
                 GamePlayManager.Instance.ActiveApples.Add(newApple);
-                RadarManager.Instance.GenerateHelper(newApple);
+                //RadarManager.Instance.GenerateHelper(newApple);
 
                 UIRadar.Instance.GeneratePointer(newApple, Color.blue);
 
@@ -128,7 +128,7 @@ public class MeshingSpawner : MonoBehaviour
                 }
 
                 GamePlayManager.Instance.ActiveApples.Add(newApple);
-                RadarManager.Instance.GenerateHelper(newApple);
+                //RadarManager.Instance.GenerateHelper(newApple);
                 UIRadar.Instance.GeneratePointer(newApple, Color.red);
             }
 
@@ -175,7 +175,7 @@ public class MeshingSpawner : MonoBehaviour
 
             if (currentEnemies.Count == 0)
             {
-                RadarManager.Instance.GenerateHelper(powerUpGO);
+                //RadarManager.Instance.GenerateHelper(powerUpGO);
 
                 UIRadar.Instance.GeneratePointer(powerUpGO, Color.blue);
             }
@@ -192,7 +192,7 @@ public class MeshingSpawner : MonoBehaviour
                 }
 
                 Debug.Log("New Power Up");
-                RadarManager.Instance.GenerateHelper(powerUpGO);
+                //RadarManager.Instance.GenerateHelper(powerUpGO);
                 UIRadar.Instance.GeneratePointer(powerUpGO, Color.blue);
             }
         }
@@ -294,7 +294,7 @@ public class MeshingSpawner : MonoBehaviour
             position = new Vector3(position.x, position.y + appleOffset + apple.transform.localScale.y / 2, position.z);
             var newApple = Instantiate(apple, position, Quaternion.identity);
             newApple.name = "1";
-            RadarManager.Instance.GenerateHelper(newApple);
+            //RadarManager.Instance.GenerateHelper(newApple);
             UIRadar.Instance.GeneratePointer(newApple, Color.red);
             GamePlayManager.Instance.ActiveApples.Add(newApple);
             Debug.Log("New apple");

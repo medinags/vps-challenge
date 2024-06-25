@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject controlsCanvas;
     [SerializeField] private GameObject powerUpCanvas;
     [SerializeField] private GameObject pointsLifeCanvas;
+    [SerializeField] private GameObject radarCanvas;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -82,6 +83,7 @@ public class UIManager : MonoBehaviour
         tapToPlaceCanvas.SetActive(false);
         controlsCanvas.SetActive(true);
         pointsLifeCanvas.SetActive(true);
+        radarCanvas.SetActive(true);
     }
 
     public void HidePowerUpApple()
