@@ -23,9 +23,11 @@ public class RadarManager : MonoBehaviour
     [SerializeField] private Material[] materials = new Material[2];
     [SerializeField] private float minDistance = 1.0f;
 
-    [HideInInspector]
+
     [SerializeField] private GameObject SnakeHead;
-    private float distance;
+    [SerializeField] private float distance;
+    [SerializeField] private float pos;
+
     [HideInInspector]
     public bool needDetroyHelper;
 
@@ -101,6 +103,7 @@ public class RadarManager : MonoBehaviour
 
                 if (distance > minDistance)
                 {
+                    this.pos = minDistance / distance;
                     var pos = Calculate(snakeHeadTransformPos, helper.target.transform.position, minDistance / distance);
                     helper.helper.transform.position = pos + Vector3.up*AROffset.Instance.Offset;
                     helper.helper.layer = LayerMask.NameToLayer("Radar");
@@ -181,21 +184,21 @@ public class RadarManager : MonoBehaviour
 
         return false;
     }
-    public void DeleteHelper(GameObject target)
-    {
-        int count = helpers.Count;
-        for (int i = 0; i < count; i++)
-        {
-            if (helpers[i].target == target)
-            {
-                helpers[i].target = null;
-                helpers[i].isVisible = false;
-            }
-        }
+    //public void DeleteHelper(GameObject target)
+    //{
+    //    int count = helpers.Count;
+    //    for (int i = 0; i < count; i++)
+    //    {
+    //        if (helpers[i].target == target)
+    //        {
+    //            helpers[i].target = null;
+    //            helpers[i].isVisible = false;
+    //        }
+    //    }
 
-        Destroy(target.gameObject);
-        needDetroyHelper = false;
-    }
+    //    Destroy(target.gameObject);
+    //    needDetroyHelper = false;
+    //}
 
     private Vector3 Calculate(Vector3 pOne, Vector3 pTwo, float t)
     {

@@ -93,8 +93,10 @@ public class SnakeManager : MonoBehaviour
                 GamePlayManager.Instance.LifeCount++;
             }
 
-            RadarManager.Instance.needDetroyHelper = true;
-            RadarManager.Instance.DeleteHelper(apple);
+    
+            UIRadar.Instance.DeletePointer(apple);
+            //RadarManager.Instance.needDetroyHelper = true;
+            //RadarManager.Instance.DeleteHelper(apple);
 
             visibleBody++;
 
@@ -160,7 +162,8 @@ public class SnakeManager : MonoBehaviour
     {
         Debug.Log("Go Power Up: " + powerUp.name);
         RadarManager.Instance.needDetroyHelper = true;
-        RadarManager.Instance.DeleteHelper(powerUp);
+        UIRadar.Instance.DeletePointer(powerUp);
+        //RadarManager.Instance.DeleteHelper(powerUp);
 
 
         PowerUpType powerUpType = powerUp.GetComponent<PowerUpHelper>().PowerUpType;

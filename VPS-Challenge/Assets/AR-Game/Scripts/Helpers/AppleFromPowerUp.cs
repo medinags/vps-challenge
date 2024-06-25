@@ -21,6 +21,7 @@ public class AppleFromPowerUp : MonoBehaviour
         Debug.Log("Power Up Aplle" + name);
         GamePlayManager.Instance.ActiveApples.Add(gameObject);
         RadarManager.Instance.GenerateHelper(this.gameObject);
+        UIRadar.Instance.GeneratePointer(this.gameObject, Color.red);
         var Pos = SnakeControllerManager.Instance.snakeBody[0].transform.position;
 
         yield return new WaitForSeconds(0.5f);
