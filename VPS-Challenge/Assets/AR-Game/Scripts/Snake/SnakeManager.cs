@@ -161,8 +161,7 @@ public class SnakeManager : MonoBehaviour
     private void CollisionWithPowerUp(GameObject powerUp)
     {
         Debug.Log("Go Power Up: " + powerUp.name);
-        RadarManager.Instance.needDetroyHelper = true;
-        UIRadar.Instance.DeletePointer(powerUp);
+
         //RadarManager.Instance.DeleteHelper(powerUp);
 
 
@@ -173,6 +172,9 @@ public class SnakeManager : MonoBehaviour
             hasImmudity = true;
             Helmet.SetActive(hasImmudity);
         }
+
+        //RadarManager.Instance.needDetroyHelper = true;
+        UIRadar.Instance.DeletePointer(powerUp);
     }
 
     private void NewPowerUp(PowerUpType obj)

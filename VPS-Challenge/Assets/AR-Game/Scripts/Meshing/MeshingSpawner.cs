@@ -112,7 +112,7 @@ public class MeshingSpawner : MonoBehaviour
                 GamePlayManager.Instance.ActiveApples.Add(newApple);
                 //RadarManager.Instance.GenerateHelper(newApple);
 
-                UIRadar.Instance.GeneratePointer(newApple, Color.blue);
+                UIRadar.Instance.GeneratePointer(newApple, Color.red);
 
             }
             else
