@@ -9,25 +9,20 @@ public class Google : MonoBehaviour
 {
     [Header("Post Data")]
     public string urlBasePostData = "https://docs.google.com/forms/d/e/1FAIpQLSefxhjUfEQRmAz8mYCzWQRjK3CQeALtgwJgPpppStHvd5FW7A/formResponse";
-
-    [Header("Entries in Google Sheets")]
     [SerializeField] private string entry1 = "entry.269494217";
     [SerializeField] private string entry2 = "entry.830528914";
     [SerializeField] private string entry3 = "entry.2134469976";
-    private string GoogleSheetName = "Form Responses 1";
-    [SerializeField] private string data1;
-    [SerializeField] private string data2;
-    [SerializeField] private string data3;
+    [SerializeField] private string GoogleSheetName = "Form Responses 1";
 
     [Header("Get Data")]
-    public string googleURL;
+    public string googleURL = "https://docs.google.com/spreadsheets/d/1p6okixrJS8_qRQoeeZc7_NB8aUUoUesTjkVTLQqrwig/edit?usp=sharing";
     public List<PlayerData> playerDataList = new List<PlayerData>();
     private string AllData;
 
     [ContextMenu("Write")]
     public void PostData(string player, string score, string location)
     {
-        StartCoroutine(WriteData(data1, data2, data3));
+        StartCoroutine(WriteData(player, score, location));
     }
 
     private IEnumerator WriteData(string player, string score, string location)
@@ -65,6 +60,7 @@ public class Google : MonoBehaviour
 
         if (webGoogleSheets.result == UnityWebRequest.Result.Success)
         {
+            AllData = webGoogleSheets.downloadHandler.text;
             string content = ExtractContentFromData(AllData, GoogleSheetName);
             ProcessData(content);
             LogPlayerData();

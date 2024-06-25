@@ -8,13 +8,16 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
-    [SerializeField] private GameObject startMenu;
+    [SerializeField] private GameObject startCanvas;
+    [SerializeField] private GameObject arcadeCanvas;
     [SerializeField] private GameObject waitMeshesCanvas;
     [SerializeField] private GameObject tapToPlaceCanvas;
     [SerializeField] private GameObject controlsCanvas;
     [SerializeField] private GameObject powerUpCanvas;
     [SerializeField] private GameObject pointsLifeCanvas;
     [SerializeField] private GameObject radarCanvas;
+
+    public event Action OnTapToPlace;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -29,12 +32,28 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameManager.Instance.OnLocationFound += LocationFound;
         GameManager.Instance.OnMinimumMeshesFound += ShowTapToPlaceUI;
         GameManager.Instance.OnEggLaid += HideTapToPlaceUI;
         GameManager.Instance.OnSnakeBorn += ShowPrincipalMenu;
         GamePlayManager.Instance.OnNewPowerUp += NewPowerUp;
+        startCanvas.SetActive(true);
 
-        startMenu.SetActive(true);
+    }
+
+    private void LocationFound()
+    {
+        arcadeCanvas.SetActive(false);
+
+        if (MeshingSpawner.Instance.IsReady)
+        {
+            Debug.Log("Meshing Ready....");
+            ShowTapToPlaceUI();
+        }
+        else
+        {
+            waitMeshesCanvas.SetActive(true);
+        }
     }
 
     private void NewPowerUp(PowerUpType obj)
@@ -54,10 +73,20 @@ public class UIManager : MonoBehaviour
             default:
                 break;
         }
-
-       
     }
 
+    public void HandleFristCanvas()
+    {
+        startCanvas.SetActive(false );
+        if (GameManager.Instance.UseVPS)
+        {
+            arcadeCanvas.SetActive(true);
+        }
+        else
+        {
+            waitMeshesCanvas.SetActive(true);
+        }
+    }
     public void UpdatePoints(string points, string lifes)
     {
         pointsLifeCanvas.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = points;
@@ -72,17 +101,31 @@ public class UIManager : MonoBehaviour
         pointsLifeCanvas.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = textTime;
     }
 
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private void ShowTapToPlaceUI()
     {
-        waitMeshesCanvas.SetActive(false);
-        tapToPlaceCanvas.SetActive(true);
+        if (!GameManager.Instance.UseVPS)
+        {
+            waitMeshesCanvas.SetActive(false);
+            tapToPlaceCanvas.SetActive(true);
+            OnTapToPlace?.Invoke();
+        }
+        else
+        {
+            Debug.Log("Use VPS...");
+            if (VPSStateController.Instance.FirstTrackingUpdateReceived)
+            {
+                Debug.Log("VPS Ready....");
+                waitMeshesCanvas.SetActive(false);
+                tapToPlaceCanvas.SetActive(true);
+                OnTapToPlace?.Invoke();
+            }
+            else
+            {
+                Debug.Log("VPS No Ready....");
+            }
+        }
+
+
     }
     private void HideTapToPlaceUI()
     {

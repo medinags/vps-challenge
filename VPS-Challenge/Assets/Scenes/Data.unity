@@ -460,9 +460,7 @@ MonoBehaviour:
   entry1: entry.269494217
   entry2: entry.830528914
   entry3: entry.2134469976
-  data1: Medina
-  data2: 202
-  data3: 8452
+  GoogleSheetName: Form Responses 1
   googleURL: https://docs.google.com/spreadsheets/d/1p6okixrJS8_qRQoeeZc7_NB8aUUoUesTjkVTLQqrwig/edit?usp=sharing
   playerDataList: []
 --- !u!4 &1612190583

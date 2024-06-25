@@ -21,7 +21,8 @@ public class ScreenTouchSpawner : MonoBehaviour
     public float launchForce = 200;
     void Start()
     {
-        GameManager.Instance.OnMinimumMeshesFound += EnableTouchReader;
+        //GameManager.Instance.OnMinimumMeshesFound += EnableTouchReader;
+        UIManager.Instance.OnTapToPlace += EnableTouchReader;
         GameManager.Instance.OnEggLaid += DisableToucReader;
         GamePlayManager.Instance.OnNewPowerUp += NewPowerUp;
     }
@@ -38,6 +39,7 @@ public class ScreenTouchSpawner : MonoBehaviour
         {
             return;
         }
+
         if (Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
         {
             Vector3 touch = Input.GetMouseButtonDown(0) ? Input.mousePosition : (Vector3)Input.GetTouch(0).position;

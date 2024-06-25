@@ -5,8 +5,22 @@ using UnityEngine;
 using Niantic.Lightship.AR.PersistentAnchors;
 public class VPSStateController : MonoBehaviour
 {
+    public static VPSStateController Instance;
+
     [SerializeField] private ARLocationManager locationManager;
-    [SerializeField] private bool firstTrackingUpdateReceived;
+    public bool FirstTrackingUpdateReceived;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -26,10 +40,11 @@ public class VPSStateController : MonoBehaviour
         ARLocation trackedLocation = args.ARLocation;
         bool isTracking = args.Tracking;
 
-        if (!firstTrackingUpdateReceived && isTracking)
+        if (!FirstTrackingUpdateReceived && isTracking)
         {
             Debug.Log("First tracking update received");
-            firstTrackingUpdateReceived = true;
+            FirstTrackingUpdateReceived = true;
+            GameManager.Instance.LocationFound();
         }
 
     }

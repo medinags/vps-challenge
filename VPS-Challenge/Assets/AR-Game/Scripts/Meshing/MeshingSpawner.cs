@@ -53,6 +53,7 @@ public class MeshingSpawner : MonoBehaviour
     public List<GameObject> currentEnemies = new List<GameObject>();
     private int grassQuantity = 0;
     private int grassPowerCount = 0;
+    public bool IsReady = false;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -152,6 +153,7 @@ public class MeshingSpawner : MonoBehaviour
         {
             isTimerComplete = true;
             GameManager.Instance.MinimumMeshesFound();
+            IsReady = true;
             meshTimer.Stop();
         }
 

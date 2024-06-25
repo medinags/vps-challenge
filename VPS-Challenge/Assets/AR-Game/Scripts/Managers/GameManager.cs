@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public event Action OnLocationFound;
     public event Action OnMinimumMeshesFound;
     public event Action OnEggLaid;
     public event Action OnSnakeBorn;
@@ -12,11 +13,13 @@ public class GameManager : MonoBehaviour
     public event Action OnappleEaten;
     public event Action OnGameOver;
     public event Action OnSnakePlaced;
+    public event Action StartGame;
 
     public GameObject SnakeManager;
 
     public static GameManager Instance;
 
+    public bool UseVPS = true;
 
     private void Awake()
     {
@@ -30,6 +33,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void UseVPSFeature(bool state)
+    {
+        UseVPS = state;
+        Debug.Log(UseVPS);
+    }
+    public void LocationFound()
+    {
+        Debug.Log("Location found");
+        OnLocationFound?.Invoke();
+    }
     public void MinimumMeshesFound()
     {
         Debug.Log("Minimum Meshes Found");
