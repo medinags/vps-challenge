@@ -50,7 +50,7 @@ public class DeathHandling : MonoBehaviour
         {
             SnakeControllerManager.Instance.snakeBody[SnakeManager.Instance.visibleBody -1].transform.GetChild(0).gameObject.SetActive(false); 
             SnakeManager.Instance.visibleBody--;
-            //GamePlayManager.instance.AppleCount--;
+            GamePlayManager.Instance.ApplesCount--;
             GamePlayManager.Instance.LifeCount--;
             Handheld.Vibrate();
         }

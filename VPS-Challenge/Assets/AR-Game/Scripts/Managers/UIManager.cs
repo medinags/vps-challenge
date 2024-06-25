@@ -1,3 +1,4 @@
+using Niantic.Protobuf.Collections;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
-
+    [SerializeField] private GameObject startMenu;
     [SerializeField] private GameObject waitMeshesCanvas;
     [SerializeField] private GameObject tapToPlaceCanvas;
     [SerializeField] private GameObject controlsCanvas;
@@ -33,6 +34,7 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.OnSnakeBorn += ShowPrincipalMenu;
         GamePlayManager.Instance.OnNewPowerUp += NewPowerUp;
 
+        startMenu.SetActive(true);
     }
 
     private void NewPowerUp(PowerUpType obj)
@@ -60,6 +62,14 @@ public class UIManager : MonoBehaviour
     {
         pointsLifeCanvas.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = points;
         pointsLifeCanvas.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = lifes;
+    }
+
+    public void UpdateGameTime(float time)
+    {
+        int minutes = Mathf.FloorToInt(time / 60F);
+        int seconds = Mathf.FloorToInt(time % 60F);
+        string textTime = string.Format("{0:00}:{1:00}", minutes, seconds);
+        pointsLifeCanvas.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = textTime;
     }
 
 

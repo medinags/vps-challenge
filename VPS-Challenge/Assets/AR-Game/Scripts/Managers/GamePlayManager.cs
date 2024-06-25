@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Events;
 public class GamePlayManager : MonoBehaviour
 {
     public event Action OnPowerUp;
@@ -20,19 +21,24 @@ public class GamePlayManager : MonoBehaviour
         }
     }
     [Header("Game Play States")]
+    [SerializeField] private float countdownTime = 10f;
+    [HideInInspector]
     public int ApplesCount = 0;
+    [HideInInspector]
     public int PowerUpsCount = 0;
-    public int PowerUpAppleCount;
+    [HideInInspector]
     public int PowerUpDestroyCount;
+    [HideInInspector]
     public int PowerUpGrassCount;
+    [HideInInspector]
     public int Points;
     public int LifeCount = 2;
 
-
+    [HideInInspector]
     public bool IsPowerUpAppleActivated;
-
+    [HideInInspector]
     public bool IsPowerUpDestroyActivated;
-
+    [HideInInspector]
     public bool IsPowerUpGrassActivated;
     [HideInInspector]
     public bool ShouldSpawnApples;
@@ -44,9 +50,51 @@ public class GamePlayManager : MonoBehaviour
     public const int POWER_UP_DESTROY = 10;
     public const int POWER_UP_GRASS = 15;
 
-    public int[] PowerUpIn = { 1, 4, 10, 15, 20, 22, 30 }; 
+    public int[] PowerUpIn = { 1, 4, 10, 15, 20, 22, 30 };
+    [HideInInspector]
     public List<GameObject> ActiveApples = new List<GameObject>();
-    public void PowerUP() 
+
+    public event Action OnCountdownFinished;
+    [SerializeField] private float currentTime;
+    [SerializeField] private bool pauseTimer = true;
+    private void Start()
+    {
+        pauseTimer = true ;
+        currentTime = countdownTime;
+        GameManager.Instance.OnSnakePlaced += SnakePlaced;
+    }
+
+    private void SnakePlaced()
+    {
+        pauseTimer = false;
+    }
+
+    private void Update()
+    {
+        if (pauseTimer)
+        {
+            return;
+        }
+        currentTime -= Time.deltaTime;
+        UIManager.Instance.UpdateGameTime(currentTime);
+
+        if (currentTime <= 0f)
+        {
+            pauseTimer = true;
+            OnCountdownFinished?.Invoke();
+            GameManager.Instance.GameOver();
+            UIManager.Instance.UpdateGameTime(0);
+        }
+    }
+
+
+    public void ResetTimer(float newTime)
+    {
+        countdownTime = newTime;
+        currentTime = countdownTime;
+        pauseTimer = true;
+    }
+    public void PowerUP()
     {
         OnPowerUp?.Invoke();
     }
@@ -76,13 +124,13 @@ public class GamePlayManager : MonoBehaviour
         OnNewPowerUp?.Invoke(powerUpType);
     }
 
-    public void PointCounts() 
+    public void PointCounts()
     {
         Points = ApplesCount * APPLE_VALUE +
-            PowerUpsCount*POWER_UP +
+            PowerUpsCount * POWER_UP +
 
-            PowerUpDestroyCount*POWER_UP_DESTROY +
-            PowerUpGrassCount*POWER_UP_GRASS;
+            PowerUpDestroyCount * POWER_UP_DESTROY +
+            PowerUpGrassCount * POWER_UP_GRASS;
         UIManager.Instance.UpdatePoints(Points.ToString(), LifeCount.ToString());
     }
 
