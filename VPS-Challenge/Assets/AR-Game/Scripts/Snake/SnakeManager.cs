@@ -86,7 +86,7 @@ public class SnakeManager : MonoBehaviour
         if (visibleBody < SnakeControllerManager.Instance.snakeBody.Count)
         {
             GamePlayManager.Instance.ApplesCount++;
-            GamePlayManager.Instance.PointCounts();
+            GamePlayManager.Instance.CalculateScore();
 
             if (GamePlayManager.Instance.ApplesCount % LifeInApple == 0)
             {
@@ -192,7 +192,7 @@ public class SnakeManager : MonoBehaviour
             MeshingSpawner.Instance.currentEnemies.RemoveAt(indexEnemy);
             Destroy(rootEnemy);
             GamePlayManager.Instance.PowerUpDestroyCount++;
-            GamePlayManager.Instance.PointCounts();
+            GamePlayManager.Instance.CalculateScore();
 
             hasImmudity = false;
             Helmet.SetActive(false);
@@ -205,7 +205,7 @@ public class SnakeManager : MonoBehaviour
             ARText.Instance.ShowSentence(false);
         }
 
-        GamePlayManager.Instance.PointCounts();
+        GamePlayManager.Instance.CalculateScore();
     }
 
     private void OnCollisionStay(Collision collision)

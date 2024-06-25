@@ -31,7 +31,7 @@ public class GamePlayManager : MonoBehaviour
     [HideInInspector]
     public int PowerUpGrassCount;
     [HideInInspector]
-    public int Points;
+    public int Score;
     public int LifeCount = 2;
 
     [HideInInspector]
@@ -120,18 +120,18 @@ public class GamePlayManager : MonoBehaviour
                 break;
         }
 
-        Instance.PointCounts();
+        Instance.CalculateScore();
         OnNewPowerUp?.Invoke(powerUpType);
     }
 
-    public void PointCounts()
+    public void CalculateScore()
     {
-        Points = ApplesCount * APPLE_VALUE +
+        Score = ApplesCount * APPLE_VALUE +
             PowerUpsCount * POWER_UP +
 
             PowerUpDestroyCount * POWER_UP_DESTROY +
             PowerUpGrassCount * POWER_UP_GRASS;
-        UIManager.Instance.UpdatePoints(Points.ToString(), LifeCount.ToString());
+        UIManager.Instance.UpdatePoints(Score.ToString(), LifeCount.ToString());
     }
 
 }

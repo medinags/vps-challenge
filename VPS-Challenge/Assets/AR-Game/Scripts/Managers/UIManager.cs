@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject powerUpCanvas;
     [SerializeField] private GameObject pointsLifeCanvas;
     [SerializeField] private GameObject radarCanvas;
+    [SerializeField] private GameObject gameOverCanvas;
+    public string PlayerName;
 
     public event Action OnTapToPlace;
     private void Awake()
@@ -37,8 +39,20 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.OnEggLaid += HideTapToPlaceUI;
         GameManager.Instance.OnSnakeBorn += ShowPrincipalMenu;
         GamePlayManager.Instance.OnNewPowerUp += NewPowerUp;
+        GameManager.Instance.OnGameOver += GameOver;
         startCanvas.SetActive(true);
+    }
 
+    public void SetPlayerName(string playerName)
+    {
+        PlayerName = playerName;
+    }
+
+    private void GameOver()
+    {
+        pointsLifeCanvas.SetActive(false);
+        radarCanvas.SetActive(false);
+        gameOverCanvas.SetActive(true);
     }
 
     private void LocationFound()

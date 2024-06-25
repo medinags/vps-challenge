@@ -9,7 +9,7 @@ public class VPSStateController : MonoBehaviour
 
     [SerializeField] private ARLocationManager locationManager;
     public bool FirstTrackingUpdateReceived;
-
+    public string CurrentVPSLocationName;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -44,6 +44,7 @@ public class VPSStateController : MonoBehaviour
         {
             Debug.Log("First tracking update received");
             FirstTrackingUpdateReceived = true;
+            CurrentVPSLocationName = args.ARLocation.name;
             GameManager.Instance.LocationFound();
         }
 

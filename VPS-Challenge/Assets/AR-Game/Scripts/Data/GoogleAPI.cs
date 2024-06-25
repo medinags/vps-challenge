@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Google : MonoBehaviour
+public class GoogleAPI : MonoBehaviour
 {
     [Header("Post Data")]
     public string urlBasePostData = "https://docs.google.com/forms/d/e/1FAIpQLSefxhjUfEQRmAz8mYCzWQRjK3CQeALtgwJgPpppStHvd5FW7A/formResponse";
