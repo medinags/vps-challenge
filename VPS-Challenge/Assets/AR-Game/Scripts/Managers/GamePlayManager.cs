@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.Events;
+using UnityEngine.InputSystem.iOS;
 public class GamePlayManager : MonoBehaviour
 {
     public event Action OnPowerUp;
@@ -62,8 +63,12 @@ public class GamePlayManager : MonoBehaviour
         pauseTimer = true ;
         currentTime = countdownTime;
         GameManager.Instance.OnSnakePlaced += SnakePlaced;
+        GameManager.Instance.OnGameOver += GameOver;
     }
-
+    private void GameOver()
+    {
+        pauseTimer = true;
+    }
     private void SnakePlaced()
     {
         pauseTimer = false;

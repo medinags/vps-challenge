@@ -14,7 +14,7 @@ public class DataHandler : MonoBehaviour
         "Apple", "Banana", "Cherry", "Date", "Elderberry",
         "Fig", "Grape", "Honeydew", "Kiwi", "Lemon"
     };
-
+    [SerializeField] private string debugLocation = "Fontaine Place Notre Dame";
     private void Awake()
     {
         googleAPI = GetComponent<GoogleAPI>();
@@ -22,21 +22,85 @@ public class DataHandler : MonoBehaviour
     void Start()
     {
         //GameManager.Instance.OnGameStart += ProcessGameData;
-        GameManager.Instance.OnLocationFound += OnLocationFound;
+        GameManager.Instance.OnGameStart += StartGame;
         //googleAPI.OnPlayerDataLoaded += ProcessGameData;
         googleAPI.GetDataInDB();
 
     }
 
-    private void OnLocationFound()
+    private void StartGame()
     {
+        ProcessGamPlayerData();
+    }
+    private void ProcessGamPlayerData()
+    {
+        List<PlayerData> playersData = googleAPI.playerDataList;
+        List<PlayerData> players = new List<PlayerData>();
+      
         if (GameManager.Instance.UseVPS)
         {
-            string location = VPSStateController.Instance.CurrentVPSLocationName;
-            ProcessGameData(location);
+            players = playersData.Where(p => p.UseVPS).ToList();
+            var VPSPlayer = GetBestThreePlayer(players, true);
+            SetDataInUI(VPSPlayer.ToArray());
+        }
+        else
+        {
+            players = playersData.Where(p => !p.UseVPS).ToList();
+            var NoVPSPlayer = GetBestThreePlayer(players);
+            SetDataInUI(NoVPSPlayer.ToArray());
+        }
+
+    }
+    
+    private void SetDataInUI(PlayerData[] players)
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            UIManager.Instance.UIScore.SetScore(i, players[i].Player, players[i].Score);
+            Debug.Log($"Player: {players[i].Player}, Score: {players[i].Score}");
         }
     }
+    private List<PlayerData> GetBestThreePlayer(List<PlayerData> players, bool useVPS = false)
+    {
+        List<PlayerData> bestPlayers = new List<PlayerData>();
 
+        if (!players.Any())
+        {
+            Debug.Log("No players: " + players.Count);
+            bestPlayers.Add(googleAPI.playerDataList[0]);
+            return bestPlayers;
+        }
+
+        if (!useVPS)
+        {
+            //GPS
+            players.Sort((x, y) => y.Score.CompareTo(x.Score));
+            Debug.Log("No VPS Players: " + players.Count);
+            return players;
+        }
+        else
+        {
+            //VPS Debug; "Fontaine Place Notre Dame"
+            string currentVPSLocation = VPSStateController.Instance.CurrentVPSLocationName;
+            var playersInLocation = players.Where(p => p.Location == currentVPSLocation).ToList();
+
+            if (playersInLocation.Any())
+            {
+                Debug.Log("VPS Players: " + playersInLocation.Count);
+                playersInLocation.Sort((x, y) => y.Score.CompareTo(x.Score)); //OKAY
+            }
+            else
+            {
+
+
+
+                Debug.Log("VPS No Players: " + playersInLocation.Count); //OKAY
+                playersInLocation.Add(googleAPI.playerDataList[0]); 
+            }
+
+            return playersInLocation;
+        }
+    }
     public void SavePlayerData()
     {
         string player = CheckAndReplacePlayerName(UIManager.Instance.PlayerName);
@@ -61,8 +125,9 @@ public class DataHandler : MonoBehaviour
 
         return playerName;
     }
-    [SerializeField] private string debugLocation = "Fontaine Place Notre Dame";
-    private void ProcessGameData(string location)
+
+
+    private void ProcessGameData()
     {
         List<PlayerData> playerData = googleAPI.playerDataList;
         var vpsPlayers = playerData.Where(p => p.UseVPS).ToList();
@@ -70,16 +135,13 @@ public class DataHandler : MonoBehaviour
 
         if (vpsPlayers.Any())
         {
+            string currentVPSLocation = VPSStateController.Instance.CurrentVPSLocationName;
+            var players = GetBestThreePlayerVPS(vpsPlayers, currentVPSLocation).ToArray();
 
-            var players = GetBestThreePlayerVPS(vpsPlayers, location).ToArray();
             for ( int i = 0; i < players.Length; i++)
             {
                 UIManager.Instance.UIScore.SetScore(i, players[i].Player, players[i].Score);
-            }
-            foreach (var player in players)
-            {
-                Debug.Log($"Player: {player.Player}, Score: {player.Score}");
-
+                Debug.Log($"Player: {players[i].Player}, Score: {players[i].Score}");
             }
         }
         if (gpsPlayers.Any())

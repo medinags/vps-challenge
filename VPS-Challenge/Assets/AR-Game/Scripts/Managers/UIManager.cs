@@ -73,9 +73,9 @@ public class UIManager : MonoBehaviour
         pointsLifeCanvas.SetActive(false);
         radarCanvas.SetActive(false);
         gameOverCanvas.SetActive(true);
+        gameOverCanvas.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GamePlayManager.Instance.Score.ToString();
     }
-
-    private void StartGame()
+        private void StartGame()
     {
         bool isVPSReady = VPSStateController.Instance.FirstTrackingUpdateReceived;
         bool isMeshingReady = MeshingSpawner.Instance.IsReady;
