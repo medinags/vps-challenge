@@ -8,29 +8,36 @@ using UnityEngine.Networking;
 public class GoogleAPI : MonoBehaviour
 {
     [Header("Post Data")]
-    public string urlBasePostData = "https://docs.google.com/forms/d/e/1FAIpQLSefxhjUfEQRmAz8mYCzWQRjK3CQeALtgwJgPpppStHvd5FW7A/formResponse";
-    [SerializeField] private string entry1 = "entry.269494217";
-    [SerializeField] private string entry2 = "entry.830528914";
-    [SerializeField] private string entry3 = "entry.2134469976";
+    public string urlBasePostData = "https://docs.google.com/forms/d/e/1FAIpQLSehTZyJkHAqa4Iz18p4eKlMM9etmT_7exjZU6oTwup8W1vOpg/formResponse";
+    [SerializeField] private string entry1 = "entry.206471073";
+    [SerializeField] private string entry2 = "entry.1252642934";
+    [SerializeField] private string entry3 = "entry.569341463";
+    [SerializeField] private string entry4 = "entry.339142722";
     [SerializeField] private string GoogleSheetName = "Form Responses 1";
 
     [Header("Get Data")]
-    public string googleURL = "https://docs.google.com/spreadsheets/d/1p6okixrJS8_qRQoeeZc7_NB8aUUoUesTjkVTLQqrwig/edit?usp=sharing";
+    public string googleURL = "https://docs.google.com/spreadsheets/d/1cupHscB9fI22nHw0eYBA6Wn-iEb9wC7b_HJKtAGk5s0/edit?usp=sharing";
     public List<PlayerData> playerDataList = new List<PlayerData>();
     private string AllData;
+    public event Action OnPlayerDataLoaded; 
 
     [ContextMenu("Write")]
-    public void PostData(string player, string score, string location)
+    public void TestPostData()
     {
-        StartCoroutine(WriteData(player, score, location));
+        PostData("Ed", "250", "Fontaine Place Notre Dame");
+    }
+    public void PostData(string player, string score, string location, string useVPS = "1")
+    {
+        StartCoroutine(WriteData(player, score, location, useVPS));
     }
 
-    private IEnumerator WriteData(string player, string score, string location)
+    private IEnumerator WriteData(string player,string score, string location, string useVPS = "1")
     {
         WWWForm form = new WWWForm();
         form.AddField(entry1, player);
-        form.AddField(entry2, score);
-        form.AddField(entry3, location);
+        form.AddField(entry2, useVPS);
+        form.AddField(entry3, score);
+        form.AddField(entry4, location);
 
         using (UnityWebRequest www = UnityWebRequest.Post(urlBasePostData, form))
         {
@@ -48,12 +55,12 @@ public class GoogleAPI : MonoBehaviour
     }
 
     [ContextMenu("Leer")]
-    public void ReadSimple()
+    public void GetDataInDB()
     {
-        StartCoroutine(ReadSimpleCorutina());
+        StartCoroutine(ReadData());
     }
 
-    private IEnumerator ReadSimpleCorutina()
+    private IEnumerator ReadData()
     {
         UnityWebRequest webGoogleSheets = UnityWebRequest.Get(googleURL);
         yield return webGoogleSheets.SendWebRequest();
@@ -64,7 +71,7 @@ public class GoogleAPI : MonoBehaviour
             string content = ExtractContentFromData(AllData, GoogleSheetName);
             ProcessData(content);
             LogPlayerData();
-    
+            OnPlayerDataLoaded?.Invoke();
         }
         else
         {
@@ -96,8 +103,9 @@ public class GoogleAPI : MonoBehaviour
             {
                 Timestamp = fields[0],
                 Player = fields[1],
-                Score = int.Parse(fields[2]),
-                Location = fields[3]
+                UseVPS = fields[2] == "1",
+                Score = int.Parse(fields[3]),
+                Location = fields[4]
             };
 
             playerDataList.Add(playerData);
@@ -119,6 +127,7 @@ public class PlayerData
 {
     public string Timestamp;
     public string Player;
+    public bool UseVPS;
     public int Score;
     public string Location;
 }

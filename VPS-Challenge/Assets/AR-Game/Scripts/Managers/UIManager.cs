@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
     [SerializeField] private GameObject startCanvas;
-    [SerializeField] private GameObject arcadeCanvas;
+    [SerializeField] private GameObject vpsArcadeCanvas;
     [SerializeField] private GameObject waitMeshesCanvas;
     [SerializeField] private GameObject tapToPlaceCanvas;
     [SerializeField] private GameObject controlsCanvas;
@@ -17,6 +17,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject pointsLifeCanvas;
     [SerializeField] private GameObject radarCanvas;
     [SerializeField] private GameObject gameOverCanvas;
+    [SerializeField] private UIScore uIScore;
+
+    public UIScore UIScore { get => uIScore; }
     public string PlayerName;
 
     public event Action OnTapToPlace;
@@ -34,13 +37,30 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.Instance.OnLocationFound += LocationFound;
-        GameManager.Instance.OnMinimumMeshesFound += ShowTapToPlaceUI;
+        GameManager.Instance.OnMinimumMeshesFound += StartGame;
+        GameManager.Instance.OnLocationFound += StartGame;
+
+        GameManager.Instance.OnGameStart += ShowTapToPlaceUI;
+
         GameManager.Instance.OnEggLaid += HideTapToPlaceUI;
         GameManager.Instance.OnSnakeBorn += ShowPrincipalMenu;
         GamePlayManager.Instance.OnNewPowerUp += NewPowerUp;
         GameManager.Instance.OnGameOver += GameOver;
         startCanvas.SetActive(true);
+    }
+
+    public void HandleFristCanvas()
+    {
+        startCanvas.SetActive(false);
+
+        if (GameManager.Instance.UseVPS)
+        {
+            vpsArcadeCanvas.SetActive(true);
+        }
+        else
+        {
+            waitMeshesCanvas.SetActive(true);
+        }
     }
 
     public void SetPlayerName(string playerName)
@@ -55,21 +75,26 @@ public class UIManager : MonoBehaviour
         gameOverCanvas.SetActive(true);
     }
 
-    private void LocationFound()
+    private void StartGame()
     {
-        arcadeCanvas.SetActive(false);
-
-        if (MeshingSpawner.Instance.IsReady)
+        bool isVPSReady = VPSStateController.Instance.FirstTrackingUpdateReceived;
+        bool isMeshingReady = MeshingSpawner.Instance.IsReady;
+        if (GameManager.Instance.UseVPS)
         {
-            Debug.Log("Meshing Ready....");
-            ShowTapToPlaceUI();
+            if ( isVPSReady && isMeshingReady) 
+            {
+                GameManager.Instance.StartGame();
+            }
+
+            vpsArcadeCanvas.SetActive(!isVPSReady);
+            waitMeshesCanvas.SetActive(!isMeshingReady);
         }
         else
         {
-            waitMeshesCanvas.SetActive(true);
+            GameManager.Instance.StartGame();
+            waitMeshesCanvas.SetActive(!isMeshingReady);
         }
     }
-
     private void NewPowerUp(PowerUpType obj)
     {
         powerUpCanvas.SetActive(true);
@@ -88,19 +113,6 @@ public class UIManager : MonoBehaviour
                 break;
         }
     }
-
-    public void HandleFristCanvas()
-    {
-        startCanvas.SetActive(false );
-        if (GameManager.Instance.UseVPS)
-        {
-            arcadeCanvas.SetActive(true);
-        }
-        else
-        {
-            waitMeshesCanvas.SetActive(true);
-        }
-    }
     public void UpdatePoints(string points, string lifes)
     {
         pointsLifeCanvas.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = points;
@@ -117,29 +129,8 @@ public class UIManager : MonoBehaviour
 
     private void ShowTapToPlaceUI()
     {
-        if (!GameManager.Instance.UseVPS)
-        {
-            waitMeshesCanvas.SetActive(false);
-            tapToPlaceCanvas.SetActive(true);
-            OnTapToPlace?.Invoke();
-        }
-        else
-        {
-            Debug.Log("Use VPS...");
-            if (VPSStateController.Instance.FirstTrackingUpdateReceived)
-            {
-                Debug.Log("VPS Ready....");
-                waitMeshesCanvas.SetActive(false);
-                tapToPlaceCanvas.SetActive(true);
-                OnTapToPlace?.Invoke();
-            }
-            else
-            {
-                Debug.Log("VPS No Ready....");
-            }
-        }
-
-
+        tapToPlaceCanvas.SetActive(true);
+        OnTapToPlace?.Invoke();
     }
     private void HideTapToPlaceUI()
     {

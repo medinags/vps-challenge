@@ -152,9 +152,9 @@ public class MeshingSpawner : MonoBehaviour
         if (meshTimer.ElapsedMilliseconds >= miniumTimeMesh && !isTimerComplete)
         {
             isTimerComplete = true;
-            GameManager.Instance.MinimumMeshesFound();
             IsReady = true;
             meshTimer.Stop();
+            GameManager.Instance.MinimumMeshesFound();
         }
 
         foreach (Transform child in meshRoot.transform)

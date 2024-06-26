@@ -24,7 +24,7 @@ public class SnakeManager : MonoBehaviour
 
     private const int LifeInApple = 3;
 
-
+    private bool deathDueToFall;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -47,7 +47,12 @@ public class SnakeManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Mathf.Abs(this.transform.position.y) > 5 && !deathDueToFall)
+        {
+            deathDueToFall = true;
+            GameManager.Instance.GameOver();
+            Debug.Log("Down....");
+        }
     }
     private void OnTriggerEnter(Collider other)
     {

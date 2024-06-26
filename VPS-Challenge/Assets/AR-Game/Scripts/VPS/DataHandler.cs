@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text.RegularExpressions;
+using System.Linq;
+using UnityEngine.Rendering;
+using System.Reflection;
 
 public class DataHandler : MonoBehaviour
 {
@@ -11,9 +14,27 @@ public class DataHandler : MonoBehaviour
         "Apple", "Banana", "Cherry", "Date", "Elderberry",
         "Fig", "Grape", "Honeydew", "Kiwi", "Lemon"
     };
-    void Start()
+
+    private void Awake()
     {
         googleAPI = GetComponent<GoogleAPI>();
+    }
+    void Start()
+    {
+        //GameManager.Instance.OnGameStart += ProcessGameData;
+        GameManager.Instance.OnLocationFound += OnLocationFound;
+        //googleAPI.OnPlayerDataLoaded += ProcessGameData;
+        googleAPI.GetDataInDB();
+
+    }
+
+    private void OnLocationFound()
+    {
+        if (GameManager.Instance.UseVPS)
+        {
+            string location = VPSStateController.Instance.CurrentVPSLocationName;
+            ProcessGameData(location);
+        }
     }
 
     public void SavePlayerData()
@@ -40,5 +61,42 @@ public class DataHandler : MonoBehaviour
 
         return playerName;
     }
+    [SerializeField] private string debugLocation = "Fontaine Place Notre Dame";
+    private void ProcessGameData(string location)
+    {
+        List<PlayerData> playerData = googleAPI.playerDataList;
+        var vpsPlayers = playerData.Where(p => p.UseVPS).ToList();
+        var gpsPlayers = playerData.Where(p => !p.UseVPS).ToList();
 
+        if (vpsPlayers.Any())
+        {
+
+            var players = GetBestThreePlayerVPS(vpsPlayers, location).ToArray();
+            for ( int i = 0; i < players.Length; i++)
+            {
+                UIManager.Instance.UIScore.SetScore(i, players[i].Player, players[i].Score);
+            }
+            foreach (var player in players)
+            {
+                Debug.Log($"Player: {player.Player}, Score: {player.Score}");
+
+            }
+        }
+        if (gpsPlayers.Any())
+        {
+
+        }
+    }
+
+    private List<PlayerData> GetBestThreePlayerVPS(List<PlayerData> players, string location)
+    {
+        List<PlayerData> playersInLocation = players.Where(p => p.Location == location).ToList();
+        if (playersInLocation.Any())
+        {
+            playersInLocation.Sort((x, y) => y.Score.CompareTo(x.Score));
+            return playersInLocation;
+        }
+        playersInLocation = new List<PlayerData> { players[0] };
+        return playersInLocation;
+    }
 }

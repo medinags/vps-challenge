@@ -7,13 +7,14 @@ public class GameManager : MonoBehaviour
 {
     public event Action OnLocationFound;
     public event Action OnMinimumMeshesFound;
+    public event Action OnGameStart;
     public event Action OnEggLaid;
     public event Action OnSnakeBorn;
     public event Action OnSnakeSpawen;
     public event Action OnappleEaten;
     public event Action OnGameOver;
     public event Action OnSnakePlaced;
-    public event Action StartGame;
+
 
     public GameObject SnakeManager;
 
@@ -48,7 +49,10 @@ public class GameManager : MonoBehaviour
         Debug.Log("Minimum Meshes Found");
         OnMinimumMeshesFound?.Invoke();
     }
-
+    public void StartGame()
+    {
+        OnGameStart?.Invoke();
+    }
     public void EggLaid()
     {
         Debug.Log("Egg Laif");
