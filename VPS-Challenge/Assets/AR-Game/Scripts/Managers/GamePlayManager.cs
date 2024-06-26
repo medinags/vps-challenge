@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.Events;
-using UnityEngine.InputSystem.iOS;
+
 public class GamePlayManager : MonoBehaviour
 {
     public event Action OnPowerUp;
