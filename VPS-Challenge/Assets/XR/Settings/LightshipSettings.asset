@@ -21,8 +21,8 @@ MonoBehaviour:
   _useLightshipScanning: 1
   _useLightshipObjectDetection: 1
   _unityLogLevel: 3
-  _fileLogLevel: 5
-  _stdoutLogLevel: 5
+  _fileLogLevel: 3
+  _stdoutLogLevel: 3
   _lightshipSimulationParams:
     _useZBufferDepth: 1
     _useSimulationPersistentAnchor: 1

@@ -72,6 +72,7 @@ public class UIManager : MonoBehaviour
     {
         pointsLifeCanvas.SetActive(false);
         radarCanvas.SetActive(false);
+        controlsCanvas.SetActive(false);
         gameOverCanvas.SetActive(true);
         gameOverCanvas.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GamePlayManager.Instance.Score.ToString();
     }

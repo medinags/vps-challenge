@@ -66,7 +66,7 @@ public class DataHandler : MonoBehaviour
 
         if (!players.Any())
         {
-            Debug.Log("No players: " + players.Count);
+            Debug.Log("No players: " + players.Count); //OKAY
             bestPlayers.Add(googleAPI.playerDataList[0]);
             return bestPlayers;
         }
