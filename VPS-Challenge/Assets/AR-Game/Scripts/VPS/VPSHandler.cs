@@ -8,9 +8,13 @@ using Niantic.Lightship.AR.VpsCoverage;
 public class VPSHandler : MonoBehaviour
 {
     [SerializeField] private ARLocationManager arLocationManager;
-    [SerializeField] private VPSCoverageControler vpsCoverage;
+    [SerializeField] private VPSCoverageController vpsCoverage;
+    [SerializeField] private GameObject defaulAnchorPrefab;
     private GameObject arLocationHolder;
-    // Start is called before the first frame update
+    private GameObject anchorObj;
+
+    private Vector3 desiredAnchorPosition;
+    private bool hasBeenDiscovered;
     void Start()
     {
         vpsCoverage.OnWayspotDefaultAnchorButtonPressed += OnWayspot;
@@ -23,9 +27,13 @@ public class VPSHandler : MonoBehaviour
 
     private void LocationTrackingStateChanged(ARLocationTrackedEventArgs obj)
     {
-        Debug.Log(obj.Tracking);
+        if (!hasBeenDiscovered && obj.Tracking)
+        {
+            Vector3 pos = arLocationHolder.transform.InverseTransformPoint(desiredAnchorPosition);
+            anchorObj.transform.localPosition = pos;
+            hasBeenDiscovered = true;
+        }
     }
-
     private void OnWayspot(LocalizationTarget target)
     {
        
@@ -38,17 +46,28 @@ public class VPSHandler : MonoBehaviour
 
         var arLocation = arLocationHolder.AddComponent<ARLocation>();
         arLocationHolder.transform.SetParent(arLocationManager.transform);
+        
+        anchorObj = SpawnDefaultAnchor(false);
 
         arLocation.Payload = new ARPersistentAnchorPayload(target.DefaultAnchor);
         arLocationManager.SetARLocations(arLocation);
         arLocationManager.StartTracking();
         arLocationHolder.name = target.Name;
-        vpsCoverage.gameObject.SetActive(false);
+        vpsCoverage.DisableCoverage();
     }
 
-    // Update is called once per frame
-    void Update()
+    private GameObject SpawnDefaultAnchor(bool spawnInOrigin)
     {
-        
+        Vector3 pos = Vector3.zero;
+        if (!spawnInOrigin)
+        {
+           pos = Camera.main.transform.position + Camera.main.transform.forward * 1.5f;
+
+        }
+        var anchordObj = Instantiate(defaulAnchorPrefab);
+        anchordObj.transform.position = pos;
+        anchordObj.transform.SetParent(arLocationHolder.transform);
+        desiredAnchorPosition = pos;
+        return anchordObj;
     }
 }

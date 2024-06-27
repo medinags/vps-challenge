@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -62,13 +63,16 @@ public class GoogleAPI : MonoBehaviour
 
     private IEnumerator ReadData()
     {
+        googleURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRvTUblONQ-p7PXyjeOgyO5smEWlisDCEGmcM6Aox55OhjrQbkDKPv9PW1_q5WhUHkTSsDM9HCJBydN/pub?gid=1726393978&single=true&output=csv";
         UnityWebRequest webGoogleSheets = UnityWebRequest.Get(googleURL);
         yield return webGoogleSheets.SendWebRequest();
 
         if (webGoogleSheets.result == UnityWebRequest.Result.Success)
         {
             AllData = webGoogleSheets.downloadHandler.text;
-            string content = ExtractContentFromData(AllData, GoogleSheetName);
+            Debug.Log(AllData);
+            //string content = ExtractContentFromData(AllData, GoogleSheetName);
+            string content = AllData;
             ProcessData(content);
             LogPlayerData();
             OnPlayerDataLoaded?.Invoke();
@@ -91,9 +95,14 @@ public class GoogleAPI : MonoBehaviour
         return content.TrimStart();
     }
 
-
+    private List<string> GetLocations()
+    {
+        List<string> uniqueLocations = playerDataList.Select(p => p.Location).Distinct().ToList();
+        return uniqueLocations;
+    }
     private void ProcessData(string content)
     {
+        Debug.Log(content);
         string[] lines = content.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
         for (int i = 1; i < lines.Length; i++)
         {

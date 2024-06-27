@@ -11,10 +11,11 @@ public class DataHandler : MonoBehaviour
     private GoogleAPI googleAPI;
     private List<string> fruitPlayerNames = new List<string>
     {
-        "Apple", "Banana", "Cherry", "Date", "Elderberry",
-        "Fig", "Grape", "Honeydew", "Kiwi", "Lemon"
+        "Apple", "Apricot", "Cherry", "Coconut", "Orange",
+        "Fig", "Grape", "Mango", "Kiwi", "Lemon"
     };
     [SerializeField] private string debugLocation = "Fontaine Place Notre Dame";
+    public List<string>  ExploredLocations = new List<string>();
     private void Awake()
     {
         googleAPI = GetComponent<GoogleAPI>();
@@ -51,7 +52,8 @@ public class DataHandler : MonoBehaviour
         }
 
     }
-    
+
+   
     private void SetDataInUI(PlayerData[] players)
     {
         for (int i = 0; i < players.Length; i++)
@@ -59,6 +61,19 @@ public class DataHandler : MonoBehaviour
             UIManager.Instance.UIScore.SetScore(i, players[i].Player, players[i].Score);
             Debug.Log($"Player: {players[i].Player}, Score: {players[i].Score}");
         }
+    }
+
+    private List<string> GetLocations(List<PlayerData> players)
+    {
+        List<string> uniqueLocations = new List<string>();
+        var vpsPlayers = players.Where(p => p.UseVPS).ToList();
+
+        if (vpsPlayers.Any())
+        {
+            uniqueLocations = players.Select(p => p.Location).Distinct().ToList();
+        }
+
+        return uniqueLocations;
     }
     private List<PlayerData> GetBestThreePlayer(List<PlayerData> players, bool useVPS = false)
     {
@@ -104,9 +119,12 @@ public class DataHandler : MonoBehaviour
     public void SavePlayerData()
     {
         string player = CheckAndReplacePlayerName(UIManager.Instance.PlayerName);
+
         string score = GamePlayManager.Instance.Score.ToString();
-        string location = VPSStateController.Instance.CurrentVPSLocationName;
-        googleAPI.PostData(player, score, location);
+        string location = string.IsNullOrWhiteSpace(VPSStateController.Instance.CurrentVPSLocationName) ? "GPS" : 
+            VPSStateController.Instance.CurrentVPSLocationName;
+        string useVPS = GameManager.Instance.UseVPS ? "1" : "0"; 
+        googleAPI.PostData(player, score, location, useVPS);
     }
 
     public string CheckAndReplacePlayerName(string playerName)
@@ -114,14 +132,13 @@ public class DataHandler : MonoBehaviour
         string pattern = @"[^a-zA-Z0-9]";
         Regex regex = new Regex(pattern);
 
-        if (regex.IsMatch(playerName))
+        if (string.IsNullOrWhiteSpace(playerName) || regex.IsMatch(playerName))
         {
             System.Random random = new System.Random();
             string randomFruitName = fruitPlayerNames[random.Next(fruitPlayerNames.Count)];
 
             return randomFruitName;
         }
-
 
         return playerName;
     }

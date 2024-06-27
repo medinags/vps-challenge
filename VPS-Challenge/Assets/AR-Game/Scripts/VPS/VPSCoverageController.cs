@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VPSCoverageControler : MonoBehaviour
+public class VPSCoverageController : MonoBehaviour
 {
     public enum MapApp
     {
@@ -18,8 +18,8 @@ public class VPSCoverageControler : MonoBehaviour
     private MapApp mapApp = MapApp.GoogleMaps;
     [SerializeField]
     private CoverageClientManager coverageClientManager;
-    [SerializeField] private float Latitude;
-    [SerializeField] private float Longitude;
+    [SerializeField] private int maxResult = 10;
+    [SerializeField] private GameObject coverageUI;
     [SerializeField] private VpsCoverageItem itemPrefab;
     [Header("UI")]
     [SerializeField] private GameObject scrollContent;
@@ -34,16 +34,19 @@ public class VPSCoverageControler : MonoBehaviour
     }
     public void DoRequest()
     {
-        coverageClientManager.UseCurrentLocation = true;
-        coverageClientManager.QueryRadius = 2000;
-        coverageClientManager.QueryLatitude = Latitude;
-        coverageClientManager.QueryLongitude = Longitude;
         coverageClientManager.TryGetCoverage(OnCoverageResult);
     }
 
     void Update()
     {
 
+    }
+
+    public void DisableCoverage()
+    {
+        coverageUI.SetActive(false);
+        coverageClientManager.enabled = false;
+        this.enabled = false;
     }
 
     private void OnCoverageResult(AreaTargetsResult result)
@@ -63,12 +66,14 @@ public class VPSCoverageControler : MonoBehaviour
             a.Area.Centroid.Distance(result.QueryLocation).
             CompareTo(b.Area.Centroid.Distance(result.QueryLocation)));
 
-            var maxCount = 5;
+            var maxCount = maxResult == 0 ? result.AreaTargets.Count : Math.Min(maxResult, result.AreaTargets.Count);
+
             foreach (var areaResult in result.AreaTargets)
             {
                 if (areaResult.Area.LocalizabilityQuality != CoverageArea.Localizability.PRODUCTION)
                 {
-                    continue;
+                    Debug.Log("But Quality...");
+                    //continue;
                 }
 
                 Debug.Log($"Got a localization target: {areaResult.Target.Name}, anchor payload: {areaResult.Target.DefaultAnchor}");
