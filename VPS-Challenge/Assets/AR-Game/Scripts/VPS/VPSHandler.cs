@@ -17,7 +17,7 @@ public class VPSHandler : MonoBehaviour
     private bool hasBeenDiscovered;
     void Start()
     {
-        vpsCoverage.OnWayspotDefaultAnchorButtonPressed += OnWayspot;
+        vpsCoverage.OnWayspotSelected += OnWayspot;
         arLocationManager.locationTrackingStateChanged += LocationTrackingStateChanged;
 
         arLocationHolder = new GameObject("ARLocation");
@@ -54,6 +54,7 @@ public class VPSHandler : MonoBehaviour
         arLocationManager.StartTracking();
         arLocationHolder.name = target.Name;
         vpsCoverage.DisableCoverage();
+
     }
 
     private GameObject SpawnDefaultAnchor(bool spawnInOrigin)

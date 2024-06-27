@@ -5,10 +5,13 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using UnityEngine.Rendering;
 using System.Reflection;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class DataHandler : MonoBehaviour
 {
+    [SerializeField] private VPSCoverageController coverageController;
     private GoogleAPI googleAPI;
+   
     private List<string> fruitPlayerNames = new List<string>
     {
         "Apple", "Apricot", "Cherry", "Coconut", "Orange",
@@ -26,7 +29,30 @@ public class DataHandler : MonoBehaviour
         GameManager.Instance.OnGameStart += StartGame;
         //googleAPI.OnPlayerDataLoaded += ProcessGameData;
         googleAPI.GetDataInDB();
+        coverageController.OnButtonsCreated += ButtonsCreated;
+    }
 
+    private void ButtonsCreated()
+    {
+        List<PlayerData> playersData = googleAPI.playerDataList;
+        List<PlayerData> players = playersData.Where(p => p.UseVPS).ToList();
+        foreach (var locationItem in coverageController.CoverageItems)
+        {
+            string location = locationItem.TitleLabelText;
+            Debug.Log(location);
+            
+            var three = GetBestThreePlayerVPS(players, location);
+
+            if (three.Count > 0)
+            {
+                PlayerData playerData = three[0];
+                locationItem.QualityText = "Leader: " + playerData.Player + " Score: " + playerData.Score; 
+            }
+            else
+            {
+                locationItem.QualityText = "Conquer it!";
+            }
+        }
     }
 
     private void StartGame()
@@ -175,7 +201,7 @@ public class DataHandler : MonoBehaviour
             playersInLocation.Sort((x, y) => y.Score.CompareTo(x.Score));
             return playersInLocation;
         }
-        playersInLocation = new List<PlayerData> { players[0] };
+        playersInLocation = new List<PlayerData> ();
         return playersInLocation;
     }
 }

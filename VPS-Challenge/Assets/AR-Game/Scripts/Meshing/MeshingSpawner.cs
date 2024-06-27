@@ -71,11 +71,27 @@ public class MeshingSpawner : MonoBehaviour
     {
         meshManager.meshesChanged += MeshesChanged;
         meshRoot = origin.TrackablesParent.gameObject;
+        if (GameManager.Instance.UseVPS)
+        {
+            GameManager.Instance.OnLocationSelected += LocationSelected;
+        }
+  
         GameManager.Instance.OnSnakePlaced += SpawnFirstApple;
         GameManager.Instance.OnSnakePlaced += FindFloor;
         GameManager.Instance.OnappleEaten += AppleEaten;
         GamePlayManager.Instance.OnNewPowerUp += NewPowerUp;
         
+    }
+
+    private void LocationSelected()
+    {
+        meshManager.gameObject.SetActive(true);
+    }
+
+    public void EnableMshing()
+    {
+       
+        meshManager.gameObject.SetActive(!GameManager.Instance.UseVPS);
     }
 
     private void NewPowerUp(PowerUpType obj)

@@ -19,17 +19,17 @@ public class VPSCoverageController : MonoBehaviour
     [SerializeField]
     private CoverageClientManager coverageClientManager;
     [SerializeField] private int maxResult = 10;
-    [SerializeField] private GameObject coverageUI;
     [SerializeField] private VpsCoverageItem itemPrefab;
     [Header("UI")]
     [SerializeField] private GameObject scrollContent;
 
-    public event Action<LocalizationTarget> OnWayspotDefaultAnchorButtonPressed;
-
+    public event Action<LocalizationTarget> OnWayspotSelected;
+    public event Action OnButtonsCreated;
+    public List<VpsCoverageItem> CoverageItems = new List<VpsCoverageItem>();
     // Start is called before the first frame update
     void Start()
     {
-        Invoke(nameof(DoRequest), 5.0f);
+        //Invoke(nameof(DoRequest), 5.0f);
 
     }
     public void DoRequest()
@@ -44,14 +44,13 @@ public class VPSCoverageController : MonoBehaviour
 
     public void DisableCoverage()
     {
-        coverageUI.SetActive(false);
         coverageClientManager.enabled = false;
         this.enabled = false;
     }
 
     private void OnCoverageResult(AreaTargetsResult result)
     {
-        Debug.Log(result.Status);
+
         if (result.Status == ResponseStatus.Success)
         {
 
@@ -92,7 +91,7 @@ public class VPSCoverageController : MonoBehaviour
                 );
 
                 contentTransform.anchoredPosition = new Vector2(0, int.MinValue);
-
+                CoverageItems.Add(targetListItemInstance);
                 maxCount--;
                 if (maxCount == 0)
                 {
@@ -106,6 +105,8 @@ public class VPSCoverageController : MonoBehaviour
         {
 
         }
+
+        OnButtonsCreated?.Invoke();
     }
 
     private void FillTargetItem(VpsCoverageItem vpsCoverageItem, LatLng queryLocation, CoverageArea area, LocalizationTarget target)
@@ -137,7 +138,8 @@ public class VPSCoverageController : MonoBehaviour
 
         vpsCoverageItem.SubscribeToCopyButton(() =>
         {
-            OnWayspotDefaultAnchorButtonPressed?.Invoke(target);
+            GameManager.Instance.LocalizationSelected();
+            OnWayspotSelected?.Invoke(target);
             GUIUtility.systemCopyBuffer = target.DefaultAnchor;
         });
     }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public event Action OnLocationSelected;
     public event Action OnLocationFound;
     public event Action OnMinimumMeshesFound;
     public event Action OnGameStart;
@@ -38,6 +39,12 @@ public class GameManager : MonoBehaviour
     {
         UseVPS = state;
         Debug.Log(UseVPS);
+    }
+
+    public void LocalizationSelected()
+    {
+        Debug.Log("Location Selected");
+        OnLocationSelected?.Invoke();
     }
     public void LocationFound()
     {

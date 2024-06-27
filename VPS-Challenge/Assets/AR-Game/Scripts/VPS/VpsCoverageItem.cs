@@ -15,6 +15,9 @@ public class VpsCoverageItem : MonoBehaviour
     private Text distanceLabel;
 
     [SerializeField]
+    private Text qualityLabel;
+
+    [SerializeField]
     private Button navigateButton;
 
     [SerializeField]
@@ -33,6 +36,12 @@ public class VpsCoverageItem : MonoBehaviour
     {
         get => distanceLabel.text;
         set => distanceLabel.text = value;
+    }
+
+    public string QualityText
+    {
+        get => qualityLabel.text;
+        set => qualityLabel.text = value;
     }
 
     public Texture WayspotImageTexture

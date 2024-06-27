@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
     [SerializeField] private GameObject startCanvas;
+    [SerializeField] private GameObject covergaCanvas;
     [SerializeField] private GameObject vpsArcadeCanvas;
     [SerializeField] private GameObject waitMeshesCanvas;
     [SerializeField] private GameObject tapToPlaceCanvas;
@@ -37,6 +38,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameManager.Instance.OnLocationSelected += LocationSelected;
         GameManager.Instance.OnMinimumMeshesFound += StartGame;
         GameManager.Instance.OnLocationFound += StartGame;
 
@@ -49,13 +51,19 @@ public class UIManager : MonoBehaviour
         startCanvas.SetActive(true);
     }
 
-    public void HandleFristCanvas()
+    private void LocationSelected()
+    {
+        covergaCanvas.SetActive(false);
+        vpsArcadeCanvas.SetActive(true);
+    }
+
+    public void StartUI()
     {
         startCanvas.SetActive(false);
 
         if (GameManager.Instance.UseVPS)
         {
-            vpsArcadeCanvas.SetActive(true);
+            covergaCanvas.SetActive(true);
         }
         else
         {
