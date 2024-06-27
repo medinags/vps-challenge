@@ -114,7 +114,7 @@ public class GoogleAPI : MonoBehaviour
                 Player = fields[1],
                 UseVPS = fields[2] == "1",
                 Score = int.Parse(fields[3]),
-                Location = fields[4]
+                Location = fields[4].Replace("\r","")
             };
 
             playerDataList.Add(playerData);

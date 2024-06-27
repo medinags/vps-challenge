@@ -5,12 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/XRA-Snake.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
-    path: Assets/Scenes/Coverage.unity
-    guid: 4ec12d9b98f140f4489c7808100d28fc
   m_configObjects:
     Niantic.Lightship.AR.LightshipSettings: {fileID: 11400000, guid: b0bf2d2892492463583eef34d30149f9, type: 2}
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 5f83540a45d6843ac98a20c1007082e3, type: 2}
