@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private string sceneName;
     public event Action OnLocationSelected;
     public event Action OnLocationFound;
     public event Action OnMinimumMeshesFound;
@@ -96,6 +98,11 @@ public class GameManager : MonoBehaviour
         OnGameOver?.Invoke();
     }
 
+    public void RestartGame()
+    {
+        Debug.Log("Restart");
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+    }
     public void PauseGame()
     {
         Time.timeScale = 0;
