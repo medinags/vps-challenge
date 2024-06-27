@@ -5,18 +5,18 @@ using System;
 
 public class RadarManager : MonoBehaviour
 {
-    public static RadarManager Instance;
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
+    //public static RadarManager Instance;
+    //private void Awake()
+    //{
+    //    if (Instance != null && Instance != this)
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //    else
+    //    {
+    //        Instance = this;
+    //    }
+    //}
 
     [SerializeField] private GameObject RadarCamera;
     [SerializeField] private GameObject SnakeHeadTracker;

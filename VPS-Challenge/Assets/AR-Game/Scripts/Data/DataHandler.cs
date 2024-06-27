@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Text.RegularExpressions;
 using System.Linq;
-
-
+using System;
 
 public class DataHandler : MonoBehaviour
 {
@@ -82,7 +81,8 @@ public class DataHandler : MonoBehaviour
    
     private void SetDataInUI(PlayerData[] players)
     {
-        for (int i = 0; i < players.Length; i++)
+        int max = Math.Min(players.Length, 3);
+        for (int i = 0; i < max; i++)
         {
             UIManager.Instance.UIScore.SetScore(i, players[i].Player, players[i].Score);
             Debug.Log($"Player: {players[i].Player}, Score: {players[i].Score}");

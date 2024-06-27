@@ -26,11 +26,11 @@ public class GrassController : MonoBehaviour
 
     IEnumerator GenerateGrass() 
     {
-        principal.transform.DOScale(Vector3.one, 1.2f);
+        principal.transform.DOScale(Vector3.one*0.5f, 0.75f);
         yield return new WaitForSeconds(0.3f);
         foreach (var child in childs)
         {
-            child.transform.DOScale(Vector3.one, 0.5f);
+            child.transform.DOScale(Vector3.one*0.5f, 0.5f);
         }
     }
 

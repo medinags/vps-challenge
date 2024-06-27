@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 7653334003944379801}
   - component: {fileID: 2149026242511789094}
   - component: {fileID: 1414916001570873789}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SnakeHead
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -133,8 +133,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 4.753476, z: 1}
-  m_Center: {x: 0, y: 0.083974004, z: 0}
+  m_Size: {x: 1, y: 4.205117, z: 1}
+  m_Center: {x: 0, y: 0.3581442, z: 0}
 --- !u!114 &1414916001570873789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,7 +167,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4421685536731919035, guid: 0626be23b5559c740a727364498e086f, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5762968277293349564, guid: 0626be23b5559c740a727364498e086f, type: 3}
       propertyPath: m_Name

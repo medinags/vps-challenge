@@ -156,7 +156,7 @@ public class UIRadar : MonoBehaviour
             if (distance > minDistance)
             {
                 tLine = minDistance / distance;
-                scaleFactor = 1.0f;
+                scaleFactor = 0.75f;
             }
             else
             {

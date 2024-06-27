@@ -70,7 +70,6 @@ public class GoogleAPI : MonoBehaviour
         if (webGoogleSheets.result == UnityWebRequest.Result.Success)
         {
             AllData = webGoogleSheets.downloadHandler.text;
-            Debug.Log(AllData);
             //string content = ExtractContentFromData(AllData, GoogleSheetName);
             string content = AllData;
             ProcessData(content);
@@ -102,7 +101,6 @@ public class GoogleAPI : MonoBehaviour
     }
     private void ProcessData(string content)
     {
-        Debug.Log(content);
         string[] lines = content.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
         for (int i = 1; i < lines.Length; i++)
         {

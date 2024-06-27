@@ -29,6 +29,10 @@ public class ScreenTouchSpawner : MonoBehaviour
 
     private void NewPowerUp(PowerUpType obj)
     {
+        if (ReadTouchs && GamePlayManager.Instance.IsPowerUpAppleActivated)
+        {
+            return;
+        }
         ReadTouchs = obj.Equals(PowerUpType.Apples);
     }
 

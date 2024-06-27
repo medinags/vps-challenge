@@ -101,7 +101,7 @@ public class SnakeManager : MonoBehaviour
             }
 
     
-            UIRadar.Instance.DeletePointer(apple);
+
             //RadarManager.Instance.needDetroyHelper = true;
             //RadarManager.Instance.DeleteHelper(apple);
 
@@ -158,6 +158,7 @@ public class SnakeManager : MonoBehaviour
             }
 
             //Destroy(apple);
+            UIRadar.Instance.DeletePointer(apple);
             GameManager.Instance.AppleEaten();
 
         }
