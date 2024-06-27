@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class VpsCoverageItem : MonoBehaviour
 {
     [SerializeField]
@@ -15,7 +15,7 @@ public class VpsCoverageItem : MonoBehaviour
     private Text distanceLabel;
 
     [SerializeField]
-    private Text qualityLabel;
+    private TextMeshProUGUI qualityLabel;
 
     [SerializeField]
     private Button navigateButton;

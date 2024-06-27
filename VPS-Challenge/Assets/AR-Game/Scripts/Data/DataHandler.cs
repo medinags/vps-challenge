@@ -45,7 +45,7 @@ public class DataHandler : MonoBehaviour
             if (three.Count > 0)
             {
                 PlayerData playerData = three[0];
-                locationItem.QualityText = "Leader: " + playerData.Player + " Score: " + playerData.Score;
+                locationItem.QualityText = "Leader: " + playerData.Player + " - " + playerData.Score;
             }
             else
             {

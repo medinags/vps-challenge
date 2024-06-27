@@ -93,6 +93,7 @@ public class ScreenTouchSpawner : MonoBehaviour
     private GameObject SpawnPowerUpApples()
     {
         int quantity = Random.Range(2, 5);
+        UIManager.Instance.SetAppleQuantity(quantity);
         GameObject appleContainer = new GameObject();
         appleContainer.transform.position = Camera.main.transform.position;
         

@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject pointsLifeCanvas;
     [SerializeField] private GameObject radarCanvas;
     [SerializeField] private GameObject gameOverCanvas;
+
     [SerializeField] private UIScore uIScore;
 
     public UIScore UIScore { get => uIScore; }
@@ -167,7 +168,13 @@ public class UIManager : MonoBehaviour
         powerUpCanvas.SetActive(true);
         powerUpCanvas.transform.GetChild(0).gameObject.SetActive(true);
         powerUpCanvas.transform.GetChild(1).gameObject.SetActive(true);
+  
 
+    }
+
+    public void SetAppleQuantity(int appleQuantity)
+    {
+        powerUpCanvas.transform.GetChild(1).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "X" + appleQuantity;
     }
     public void ShowPowerUpGrass(int grassQuantity)
     {
@@ -181,6 +188,7 @@ public class UIManager : MonoBehaviour
         StartCoroutine(HideGrassHelmentUI(4, 5));
     }
 
+    
     public void ShowPowerUpHelmet()
     {
         powerUpCanvas.SetActive(true);

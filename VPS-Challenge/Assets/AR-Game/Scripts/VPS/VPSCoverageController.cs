@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +21,7 @@ public class VPSCoverageController : MonoBehaviour
     private CoverageClientManager coverageClientManager;
     [SerializeField] private int maxResult = 10;
     [SerializeField] private VpsCoverageItem itemPrefab;
+    [SerializeField] private TextMeshProUGUI status;
     [Header("UI")]
     [SerializeField] private GameObject scrollContent;
 
@@ -30,10 +32,16 @@ public class VPSCoverageController : MonoBehaviour
     void Start()
     {
         //Invoke(nameof(DoRequest), 5.0f);
+#if !UNITY_EDITOR && UNITY_ANDROID
+        mapApp = MapApp.GoogleMaps;
+#elif !UNITY_EDITOR && UNITY_IOS
+        mapApp = MapApp.AppleMaps;
+#endif
 
     }
     public void DoRequest()
     {
+        status.text = "Requesting coverage from server...";
         coverageClientManager.TryGetCoverage(OnCoverageResult);
     }
 
@@ -50,16 +58,13 @@ public class VPSCoverageController : MonoBehaviour
 
     private void OnCoverageResult(AreaTargetsResult result)
     {
+        var responseText = string.Empty;
 
         if (result.Status == ResponseStatus.Success)
         {
 
-            string responseText = "Response : " + result.AreaTargets.Count +
-                " targets(s) found within " + result.QueryRadius +
-                "m of [" + result.QueryLocation.Latitude +
-                ", " + result.QueryLocation.Longitude + "]";
-
-            Debug.Log(responseText);
+            responseText = "Response : " + result.AreaTargets.Count +
+                 " targets(s) found within a radius of " + result.QueryRadius;
 
             result.AreaTargets.Sort((a, b) =>
             a.Area.Centroid.Distance(result.QueryLocation).
@@ -98,15 +103,14 @@ public class VPSCoverageController : MonoBehaviour
                     break;
                 }
             }
-
-
         }
         else
         {
-
+            responseText = "Response : " + result.Status;
         }
 
         OnButtonsCreated?.Invoke();
+        status.text = responseText;
     }
 
     private void FillTargetItem(VpsCoverageItem vpsCoverageItem, LatLng queryLocation, CoverageArea area, LocalizationTarget target)

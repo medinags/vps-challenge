@@ -51,6 +51,8 @@ public class SnakeManager : MonoBehaviour
         {
             deathDueToFall = true;
             GameManager.Instance.GameOver();
+            SnakeControllerManager.Instance.snakeBody[0].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            SnakeControllerManager.Instance.gameObject.SetActive(false);
             Debug.Log("Down....");
         }
     }

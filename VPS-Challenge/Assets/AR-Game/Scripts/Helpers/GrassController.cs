@@ -30,7 +30,7 @@ public class GrassController : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         foreach (var child in childs)
         {
-            child.transform.DOScale(Vector3.one, 0.8f);
+            child.transform.DOScale(Vector3.one, 0.5f);
         }
     }
 
