@@ -44,6 +44,7 @@ public class GamePlayManager : MonoBehaviour
     public bool ShouldSpawnApples;
     public int deadTime = 4500;
 
+    public const int LIVE_VALUE = 5;
     public const int APPLE_VALUE = 20;
     public const int POWER_UP = 10;
     public const int POWER_UP_APPLE = 10;
@@ -51,7 +52,7 @@ public class GamePlayManager : MonoBehaviour
     public const int POWER_UP_GRASS = 15;
 
     public int[] PowerUpIn = { 1, 4, 10, 15, 20, 22, 30 };
-    [HideInInspector]
+
     public List<GameObject> ActiveApples = new List<GameObject>();
 
     public event Action OnCountdownFinished;
@@ -132,7 +133,7 @@ public class GamePlayManager : MonoBehaviour
     {
         Score = ApplesCount * APPLE_VALUE +
             PowerUpsCount * POWER_UP +
-
+            LifeCount*LIVE_VALUE +
             PowerUpDestroyCount * POWER_UP_DESTROY +
             PowerUpGrassCount * POWER_UP_GRASS;
         UIManager.Instance.UpdatePoints(Score.ToString(), LifeCount.ToString());

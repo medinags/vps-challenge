@@ -85,6 +85,12 @@ public class UIManager : MonoBehaviour
         gameOverCanvas.SetActive(true);
         gameOverCanvas.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GamePlayManager.Instance.Score.ToString();
     }
+
+    public void SetPositionWithScore(string posPlayerScore)
+    {
+        gameOverCanvas.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = posPlayerScore;
+
+    }
     private void StartGame()
     {
         bool isVPSReady = VPSStateController.Instance.FirstTrackingUpdateReceived;

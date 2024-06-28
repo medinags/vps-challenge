@@ -16,7 +16,7 @@ public class DataHandler : MonoBehaviour
         "Fig", "Grape", "Mango", "Kiwi", "Lemon"
     };
     [SerializeField] private string debugLocation = "Fontaine Place Notre Dame";
-    public List<string>  ExploredLocations = new List<string>();
+    [SerializeField] private List<PlayerData> bestPlayers = new List<PlayerData>();
     private void Awake()
     {
         googleAPI = GetComponent<GoogleAPI>();
@@ -66,16 +66,17 @@ public class DataHandler : MonoBehaviour
         {
             players = playersData.Where(p => p.UseVPS).ToList();
             //Debug.Log(VPSStateController.Instance.CurrentVPSLocationName);
-            var VPSPlayer = GetBestThreePlayer(players, VPSStateController.Instance.CurrentVPSLocationName, true);
-            SetDataInUI(VPSPlayer.ToArray());
+            bestPlayers = GetBestThreePlayer(players, VPSStateController.Instance.CurrentVPSLocationName, true);
+            var VPSPlayer = bestPlayers.ToArray();
+            SetDataInUI(VPSPlayer);
         }
         else
         {
             players = playersData.Where(p => !p.UseVPS).ToList();
-            var NoVPSPlayer = GetBestThreePlayer(players,"GPS");
-            SetDataInUI(NoVPSPlayer.ToArray());
+            bestPlayers = GetBestThreePlayer(players, "GPS");
+            var NoVPSPlayer = bestPlayers.ToArray();
+            SetDataInUI(NoVPSPlayer);
         }
-
     }
 
    
@@ -131,8 +132,23 @@ public class DataHandler : MonoBehaviour
         string score = GamePlayManager.Instance.Score.ToString();
         string location = string.IsNullOrWhiteSpace(VPSStateController.Instance.CurrentVPSLocationName) ? "GPS" : 
             VPSStateController.Instance.CurrentVPSLocationName;
-        string useVPS = GameManager.Instance.UseVPS ? "1" : "0"; 
-        googleAPI.PostData(player, score, location, useVPS);
+        string useVPS = GameManager.Instance.UseVPS ? "1" : "0";
+
+        //googleAPI.PostData(player, score, location, useVPS);
+        string text = "Congratulations! You ranked: " + GetPlayerPosition(GamePlayManager.Instance.Score) + " on the leaderboard!";
+        UIManager.Instance.SetPositionWithScore(text); 
+    }
+
+    public int GetPlayerPosition(int newScore)
+    {
+        for (int i = 0; i < bestPlayers.Count; i++)
+        {
+            if (newScore > bestPlayers[i].Score)
+            {
+                return i+1;
+            }
+        }
+        return bestPlayers.Count;
     }
 
     public string CheckAndReplacePlayerName(string playerName)

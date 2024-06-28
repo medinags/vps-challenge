@@ -92,6 +92,13 @@ public class SnakeManager : MonoBehaviour
     {
         if (visibleBody < SnakeControllerManager.Instance.snakeBody.Count)
         {
+            int indexApple = GamePlayManager.Instance.ActiveApples.IndexOf(apple);
+            if (indexApple == -1)
+            {
+                Debug.Log("Bug -1");
+                return;
+            }
+
             GamePlayManager.Instance.ApplesCount++;
             GamePlayManager.Instance.CalculateScore();
 
@@ -112,8 +119,6 @@ public class SnakeManager : MonoBehaviour
 
             bodyPart.gameObject.GetComponent<Rigidbody>().isKinematic = false; //?
 
-            Debug.Log(apple.name);
-            int indexApple = GamePlayManager.Instance.ActiveApples.IndexOf(apple);
             Debug.Log(indexApple);
             GamePlayManager.Instance.ActiveApples.RemoveAt(indexApple);
 
