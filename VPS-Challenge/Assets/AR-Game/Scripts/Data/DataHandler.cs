@@ -134,7 +134,7 @@ public class DataHandler : MonoBehaviour
             VPSStateController.Instance.CurrentVPSLocationName;
         string useVPS = GameManager.Instance.UseVPS ? "1" : "0";
 
-        //googleAPI.PostData(player, score, location, useVPS);
+        googleAPI.PostData(player, score, location, useVPS);
         string text = "Congratulations! You ranked: " + GetPlayerPosition(GamePlayManager.Instance.Score) + " on the leaderboard!";
         UIManager.Instance.SetPositionWithScore(text); 
     }

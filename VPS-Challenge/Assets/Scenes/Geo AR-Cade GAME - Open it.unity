@@ -1726,7 +1726,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapApp: 0
   coverageClientManager: {fileID: 327196135}
-  maxResult: 10
+  maxResult: 20
   itemPrefab: {fileID: 9198172911286446048, guid: b559ecde99242004f93823cfc8b8b677, type: 3}
   status: {fileID: 82821342}
   scrollContent: {fileID: 5301156035880879263}
@@ -1743,20 +1743,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b90fbc7f7b5e4c3987d7bee5c04392a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _queryRadius: 1000
-  _privateARLocations:
-  - {fileID: 11400000, guid: 92b8d41c4df9fe54c8634eee7b68d30f, type: 2}
+  _queryRadius: 2000
+  _privateARLocations: []
   _useCurrentLocation: 1
   _queryLatitude: 45.191025
   _queryLongitude: 5.7177434
-  _privateARLocalizationTargets:
-  - _identifier: 
-    _name: 7c08cddfa5d84da9b03b6e18ff0f5915.107
-    _center:
-      lat_degrees: 45.182037353515625
-      lng_degrees: 5.71553897857666
-    _imageURL: 
-    _defaultAnchor: ChQI7+6J/tDv/qQzEIa9htL1xIiffhjm2t+o4fyGAyonChUIt6/HoKKj2KWZARCrp/nJkvGGxX0SCQoAEgUlAACAPx0AAIA/MhkKBSUAAIA/EQAAAABOl0ZAGQAAAAC+3BZA
+  _privateARLocalizationTargets: []
 --- !u!4 &327196136
 Transform:
   m_ObjectHideFlags: 0
@@ -4941,10 +4933,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetFrameRate: 5
   _fuseKeyframesOnly: 0
-  _maximumIntegrationDistance: 10
+  _maximumIntegrationDistance: 5
   _voxelSize: 0.05
   _enableDistanceBasedVolumetricCleanup: 1
-  _meshBlockSize: 1.2
+  _meshBlockSize: 1
   _meshCullingDistance: 0
   _enableMeshDecimation: 1
   _isMeshFilteringEnabled: 1
