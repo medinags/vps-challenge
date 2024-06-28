@@ -40,7 +40,6 @@ public class GameManager : MonoBehaviour
     public void UseVPSFeature(bool state)
     {
         UseVPS = state;
-        Debug.Log(UseVPS);
     }
 
     public void LocalizationSelected()

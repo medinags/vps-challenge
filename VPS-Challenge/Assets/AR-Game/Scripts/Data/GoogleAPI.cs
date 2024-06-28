@@ -73,7 +73,7 @@ public class GoogleAPI : MonoBehaviour
             //string content = ExtractContentFromData(AllData, GoogleSheetName);
             string content = AllData;
             ProcessData(content);
-            LogPlayerData();
+            //LogPlayerData();
             OnPlayerDataLoaded?.Invoke();
         }
         else
@@ -117,6 +117,8 @@ public class GoogleAPI : MonoBehaviour
 
             playerDataList.Add(playerData);
         }
+
+        Debug.Log("Got data from " + playerDataList.Count+ " Players");
     }
 
     private void LogPlayerData()

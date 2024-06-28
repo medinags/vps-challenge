@@ -42,7 +42,7 @@ public class VPSStateController : MonoBehaviour
 
         if (!FirstTrackingUpdateReceived && isTracking)
         {
-            Debug.Log("First tracking update received");
+            Debug.Log("First VPS tracking update received");
             FirstTrackingUpdateReceived = true;
             CurrentVPSLocationName = args.ARLocation.name;
             GameManager.Instance.LocationFound();

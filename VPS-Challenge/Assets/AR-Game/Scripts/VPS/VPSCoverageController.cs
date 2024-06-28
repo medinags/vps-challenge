@@ -65,7 +65,7 @@ public class VPSCoverageController : MonoBehaviour
 
             responseText = "Response : " + result.AreaTargets.Count +
                  " targets(s) found within a radius of " + result.QueryRadius;
-
+            Debug.Log(responseText);    
             result.AreaTargets.Sort((a, b) =>
             a.Area.Centroid.Distance(result.QueryLocation).
             CompareTo(b.Area.Centroid.Distance(result.QueryLocation)));
@@ -76,11 +76,11 @@ public class VPSCoverageController : MonoBehaviour
             {
                 if (areaResult.Area.LocalizabilityQuality != CoverageArea.Localizability.PRODUCTION)
                 {
-                    Debug.Log("But Quality...");
+                    //Debug.Log("But Quality...");
                     //continue;
                 }
 
-                Debug.Log($"Got a localization target: {areaResult.Target.Name}, anchor payload: {areaResult.Target.DefaultAnchor}");
+                //Debug.Log($"Got a localization target: {areaResult.Target.Name}, anchor payload: {areaResult.Target.DefaultAnchor}");
 
                 VpsCoverageItem targetListItemInstance = Instantiate(itemPrefab, scrollContent.transform, false);
                 FillTargetItem(targetListItemInstance, result.QueryLocation, areaResult.Area, areaResult.Target);

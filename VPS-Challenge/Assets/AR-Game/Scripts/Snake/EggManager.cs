@@ -21,8 +21,11 @@ public class EggController : MonoBehaviour
     {
         //GameManager.instance.SnakeBorn();
         Debug.Log("Snake Generation");
-        this.transform.DOShakeRotation(1.5f, 60, -90, 90, true);
-        yield return new WaitForSeconds(1.25f);
+        //this.transform.DOShakeRotation(1.5f, 60, -90, 90, true);
+
+        this.transform.DORotate(new Vector3(0, 360, 0), 2.5f, RotateMode.FastBeyond360);
+
+        yield return new WaitForSeconds(2.0f);
 
         Snake.transform.position = this.transform.position;
         Snake.SetActive(true);

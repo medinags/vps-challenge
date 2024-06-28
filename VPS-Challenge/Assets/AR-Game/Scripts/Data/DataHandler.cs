@@ -48,7 +48,7 @@ public class DataHandler : MonoBehaviour
             }
             else
             {
-                locationItem.QualityText = "Conquer it!";
+                locationItem.QualityText = "Be the First!";
             }
         }
     }
@@ -65,7 +65,7 @@ public class DataHandler : MonoBehaviour
         if (GameManager.Instance.UseVPS)
         {
             players = playersData.Where(p => p.UseVPS).ToList();
-            Debug.Log(VPSStateController.Instance.CurrentVPSLocationName);
+            //Debug.Log(VPSStateController.Instance.CurrentVPSLocationName);
             var VPSPlayer = GetBestThreePlayer(players, VPSStateController.Instance.CurrentVPSLocationName, true);
             SetDataInUI(VPSPlayer.ToArray());
         }
@@ -85,7 +85,7 @@ public class DataHandler : MonoBehaviour
         for (int i = 0; i < max; i++)
         {
             UIManager.Instance.UIScore.SetScore(i, players[i].Player, players[i].Score);
-            Debug.Log($"Player: {players[i].Player}, Score: {players[i].Score}");
+            //Debug.Log($"Player: {players[i].Player}, Score: {players[i].Score}");
         }
     }
 
@@ -151,20 +151,4 @@ public class DataHandler : MonoBehaviour
         return playerName;
     }
 
-
-    private List<PlayerData> GetBestThreePlayerVPS(List<PlayerData> players, string location)
-    {
-        List<PlayerData> playersInLocation = players.Where(p => p.Location == location).ToList();
-        if (playersInLocation.Any())
-        {
-            playersInLocation.Sort((x, y) => y.Score.CompareTo(x.Score));
-            return playersInLocation;
-        }
-        foreach (var item in playersInLocation)
-        {
-            Debug.Log( "Best Players: " + " "+item.Player);
-        }
-        playersInLocation = new List<PlayerData> ();
-        return playersInLocation;
-    }
 }

@@ -52,7 +52,7 @@ public class ConsoleDisplayer : MonoBehaviour
                 DisplayMsg(logString, red);
                 break;
             case LogType.Warning:
-                DisplayMsg(logString, yellow);
+                //DisplayMsg(logString, yellow);
                 break;
             case LogType.Log:
                 DisplayMsg(logString, blue);

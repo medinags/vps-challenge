@@ -85,13 +85,13 @@ public class UIManager : MonoBehaviour
         gameOverCanvas.SetActive(true);
         gameOverCanvas.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GamePlayManager.Instance.Score.ToString();
     }
-        private void StartGame()
+    private void StartGame()
     {
         bool isVPSReady = VPSStateController.Instance.FirstTrackingUpdateReceived;
         bool isMeshingReady = MeshingSpawner.Instance.IsReady;
         if (GameManager.Instance.UseVPS)
         {
-            if ( isVPSReady && isMeshingReady) 
+            if (isVPSReady && isMeshingReady)
             {
                 GameManager.Instance.StartGame();
             }
@@ -168,7 +168,7 @@ public class UIManager : MonoBehaviour
         powerUpCanvas.SetActive(true);
         powerUpCanvas.transform.GetChild(0).gameObject.SetActive(true);
         powerUpCanvas.transform.GetChild(1).gameObject.SetActive(true);
-  
+
 
     }
 
@@ -188,7 +188,7 @@ public class UIManager : MonoBehaviour
         StartCoroutine(HideGrassHelmentUI(4, 5));
     }
 
-    
+
     public void ShowPowerUpHelmet()
     {
         powerUpCanvas.SetActive(true);

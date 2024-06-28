@@ -27,12 +27,12 @@ public class VPSHandler : MonoBehaviour
 
     private void LocationTrackingStateChanged(ARLocationTrackedEventArgs obj)
     {
-        if (!hasBeenDiscovered && obj.Tracking)
+/*        if (!hasBeenDiscovered && obj.Tracking)
         {
             Vector3 pos = arLocationHolder.transform.InverseTransformPoint(desiredAnchorPosition);
             anchorObj.transform.localPosition = pos;
             hasBeenDiscovered = true;
-        }
+        }*/
     }
     private void OnWayspot(LocalizationTarget target)
     {
@@ -47,7 +47,7 @@ public class VPSHandler : MonoBehaviour
         var arLocation = arLocationHolder.AddComponent<ARLocation>();
         arLocationHolder.transform.SetParent(arLocationManager.transform);
         
-        anchorObj = SpawnDefaultAnchor(false);
+        //anchorObj = SpawnDefaultAnchor(false);
 
         arLocation.Payload = new ARPersistentAnchorPayload(target.DefaultAnchor);
         arLocationManager.SetARLocations(arLocation);
