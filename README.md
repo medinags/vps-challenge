@@ -39,7 +39,7 @@ The mission is to explore different Wayspots while playing Snake Arcade in AR, a
 
 # Test And Build
 
-You can test the application using Playback mode, allowing you to test VPS features. It's crucial to control camera movement during testing, so it's best to build the application as previously explained. If you wish to test indoors, you can disable VPS mode.
+You can test the application using Playback mode, allowing you to test VPS features, the name of the main scene is: **Geo AR-Cade GAME - Open it**. It's crucial to control camera movement during testing, so it's best to build the application as previously explained. If you wish to test indoors, you can disable VPS mode.
 
 For Android, you can download the APK from this link: [APK Download Link]
 
