@@ -6,8 +6,7 @@ Master each Wayspot to become the top player in Geo AR-Cade and watch as public 
 
 # Gameplay
 
-"Geo AR-Cade" stands as a groundbreaking augmented reality game that utilizes VPS from ARDK. 
-The mission is to explore different Wayspots while playing Snake Arcade in AR, aiming to achieve the highest score at each location.
+Geo AR-Cade is a groundbreaking augmented reality game that utilizes VPS from ARDK and other advanced ARDK features. The mission is to explore different Wayspots while playing the classic Snake arcade game in AR, aiming to achieve the highest score at each location.
 
 1. **Open Geo AR-Cade:** At the start, you'll see a toggle with VPS enabled by default, as VPS is a core feature of our experience. You can disable it for indoor gameplay, which is perfect for testing and debugging. When disabled, all game features remain accessible.
 
@@ -39,9 +38,9 @@ The mission is to explore different Wayspots while playing Snake Arcade in AR, a
 
 # Test And Build
 
-You can test the application using Playback mode, allowing you to test VPS features, the name of the main scene is: **Geo AR-Cade GAME - Open it**. It's crucial to control camera movement during testing, so it's best to build the application as previously explained. If you wish to test indoors, you can disable VPS mode.
+The name of the main scene is: **Geo AR-Cade GAME - Open it**. You can test the application using Playback mode, allowing you to test ARDK and VPS features. But it's crucial to control camera movement during playing, so it's best to build the application as previously explained. If you wish to test indoors, you can disable VPS mode.
 
-For Android, you can download the APK from this link: [APK Download Link](https://drive.google.com/uc?export=download&id=11tUt59bfVHjoMY1C_jqX1hehpNkhoLZo)
+For Android, you can download the APK from this link: [APK Download Link](https://drive.google.com/uc?export=download&id=11Qt5aU6tHuDR2ulvXHqf3vmubk0XlToe)
 
 To build for iPhone, follow these requirements:
 
@@ -55,6 +54,8 @@ To build for iPhone, follow these requirements:
 
 - iPhone 13 Pro
 - Pixel 4XL
+
+
 ## Troubleshooting:
 
 Sometimes, the build from Xcode may fail due to a known issue. The solution is:
