@@ -1,7 +1,7 @@
 # GEO AR-Cade
 
 Step into the future with Geo AR-Cade, an Augmented Reality experience powered by Niantic's cutting-edge technology (VPS, Meshing, and Semantic Segmentation).
-Get ready to explore and compete against players from your city and around the world playing a clasing a Snake clasic Arcade Game
+Get ready to explore and compete against players from your city and around the world playing a clasing a Snake clasic Arcade Game.
 Master each Wayspot to become the top player in Geo AR-Cade and watch as public spaces transform into vibrant hubs of social interaction.
 
 # Gameplay
