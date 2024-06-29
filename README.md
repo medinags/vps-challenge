@@ -34,7 +34,7 @@ Geo AR-Cade is a groundbreaking augmented reality game that utilizes VPS from AR
 
 13. **Apples and Powers:** Avoid rocks spawned after eating apples and utilize various powers available.
 
-14. **End of Game:** After 2 minutes, enter your name to rank on the Wayspot leaderboard.
+14. **End of Game:** After 2 minutes, enter your name to rank on the Wayspot leaderboard. Your score may take a few minutes to update in the Wayspot high score table.
 
 # Test And Build
 
