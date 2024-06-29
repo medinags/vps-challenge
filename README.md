@@ -6,7 +6,7 @@ Master each Wayspot to become the top player in Geo AR-Cade and watch as public 
 
 # Gameplay
 
-"Geo AR-Cade" is an innovative augmented reality game that utilizes VPS from ARDK. 
+"Geo AR-Cade" stands as a groundbreaking augmented reality game that utilizes VPS from ARDK. 
 The mission is to explore different Wayspots while playing Snake Arcade in AR, aiming to achieve the highest score at each location.
 
 1. **Open Geo AR-Cade:** At the start, you'll see a toggle with VPS enabled by default, as VPS is a core feature of our experience. You can disable it for indoor gameplay, which is perfect for testing and debugging. When disabled, all game features remain accessible.
@@ -38,5 +38,33 @@ The mission is to explore different Wayspots while playing Snake Arcade in AR, a
 14. **End of Game:** After 2 minutes, enter your name to rank on the Wayspot leaderboard.
 
 # Test And Build
+
+You can test the application using Playback mode, allowing you to test VPS features. It's crucial to control camera movement during testing, so it's best to build the application as previously explained. If you wish to test indoors, you can disable VPS mode.
+
+For Android, you can download the APK from this link: [APK Download Link]
+
+To build for iPhone, follow these requirements:
+
+## Requirements:
+
+- Unity 2022.3.24f1
+- ARDK 3.6.
+- Xcode 15.0.1
+
+## Tested Devices:
+
+- iPhone 13 Pro
+- Pixel 4XL
+## Troubleshooting:
+
+Sometimes, the build from Xcode may fail due to a known issue. The solution is:
+
+1. Open XCodeProject
+2. Build Setting
+3. UnityFramework
+4. Linkin - General
+5. Other Linker Flasg
+6. Add "-ld64"
+7. Build
 
 
