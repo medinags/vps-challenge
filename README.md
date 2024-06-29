@@ -38,7 +38,7 @@ Geo AR-Cade is a groundbreaking augmented reality game that utilizes VPS from AR
 
 # Test And Build
 
-The name of the main scene is: **Geo AR-Cade GAME - Open it**. You can test the application using Playback mode, allowing you to test ARDK and VPS features. But it's crucial to control camera movement during playing, so it's best to build the application as previously explained. If you wish to test indoors, you can disable VPS mode.
+The name of the main scene is: **Geo AR-Cade GAME - Open it** find it in *Assets/Scenes*. You can test the application using Playback mode, allowing you to test ARDK and VPS features. But it's crucial to control camera movement during playing, so it's best to build the application, as previously explained if you wish to test indoors, you can disable VPS mode.
 
 For Android, you can download the APK from this link: [APK Download Link](https://drive.google.com/uc?export=download&id=11Qt5aU6tHuDR2ulvXHqf3vmubk0XlToe)
 
